@@ -1,0 +1,2 @@
+- Spring boot project initialize (Main Server)
+- Set up mongo

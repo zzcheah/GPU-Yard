@@ -1,0 +1,14 @@
+{
+  "id": "12345",
+  "uid": "userid",
+  "createdAt": "somedate",
+  "inputFiles": [
+    "ifID1",
+    "ifID2"
+  ],
+  "outputFiles": [
+    "ofID1",
+    "ofID2"
+  ]
+
+}
