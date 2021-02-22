@@ -1,2 +1,4 @@
 - Spring boot project initialize (Main Server)
-- Set up mongo
+- Set up mongo DB
+- GitHub for backup
+

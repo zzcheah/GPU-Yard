@@ -1,0 +1,17 @@
+1.	user modifies request configurations.
+    a.	manually choose GPU or auto (default to auto, start with auto only)
+    b.	upload input files (store file in volume / mongo DB)
+    c.	enter input param in JSON or XML (store in MongoDB)
+
+2.	server adds metadata  to requests object.
+    a.	File object id
+    b.	user id
+    c.	date
+
+3.	push request id to queue, write queue to mongo db for persistency
+4.	gpu machine send api call to get request to process (JAVA)
+5.	pass api address, UID and request id to python docker image. (JAVA)
+6.	python docker container download input files
+7.	based on input files including param, construct keras model, build and save
+8.	upload to server (update status)
+9.	notify user

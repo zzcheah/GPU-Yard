@@ -1,0 +1,11 @@
+Mongo FS Service:
+- store/retrieve file from db
+
+Backend Queue:
+- Java Queue for popping queue
+- Backup queue in mongoDB
+
+API:
+- get job/task from queue
+- upload and download file
+

@@ -1,3 +1,0 @@
-Mongo FS Service:
-- Upload and download file
-
