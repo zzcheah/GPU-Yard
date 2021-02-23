@@ -1,5 +1,6 @@
-Mongo FS Service:
-- store/retrieve file from db
+=== === === === === === === === === === === === === === === === === === === === === === ===
+                                      In Progress
+=== === === === === === === === === === === === === === === === === === === === === === ===
 
 Backend Queue:
 - Java Queue for popping queue
@@ -7,5 +8,16 @@ Backend Queue:
 
 API:
 - get job/task from queue
-- upload and download file
 
+
+
+
+=== === === === === === === === === === === === === === === === === === === === === === ===
+                                      COMPLETED
+=== === === === === === === === === === === === === === === === === === === === === === ===
+
+Mongo FS Service:
+- store/retrieve file from db
+
+API:
+- upload and download file

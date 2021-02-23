@@ -15,3 +15,18 @@
 7.	based on input files including param, construct keras model, build and save
 8.	upload to server (update status)
 9.	notify user
+
+{
+  "id": "12345",
+  "uid": "userid",
+  "createdAt": "someDate",
+  "inputFiles": [
+    "ifID1",
+    "ifID2"
+  ],
+  "outputFiles": [
+    "ofID1",
+    "ofID2"
+  ]
+
+}
