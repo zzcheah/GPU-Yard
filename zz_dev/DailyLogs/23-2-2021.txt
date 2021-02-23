@@ -1,0 +1,14 @@
+Mongo FS Service:
+- store/retrieve file from db
+
+API:
+- upload and download file
+- add request
+- release machine
+
+QueueService:
+- 2 blocking queues (job queue and machine queue)
+- polling thread
+- backing API functions
+- round robin job queue for machine selection
+
