@@ -2,14 +2,44 @@
                                       In Progress
 === === === === === === === === === === === === === === === === === === === === === === ===
 
-Backend Queue:
-- send api call to machine to process the job
+Task Worker:
+-> API to receive workload
+-> preprocess workload, get related information (API url, etc)
+-> retrieve inputFiles, param
+-> connect to docker daemon
+-> launch container to process the request
 
 
+
+Main Server:
+-> send api call to machine to process the job
+-> restore queue from mongo (persistent) after restart
+
+Common (java package to be shared) :
+-> constants for collection names and other repetitive strings.
+-> optimize to reduce redundancy and improve consistency
 
 Additional:
--> restore queue from mongo (persistent) after restart
--> constants for collection names and other repetitive strings.
+-> how task workers know the address of main server
+-> design inputFiles folder hierarchy (should use zip)
+Idea:
+1.  zip in a specific tree
+2.  extract inside/outside container to be determined
+3.  Extraction
+    a.  Inside (download from main server through api)
+        - python extract in volume within container
+    b.  Outside (retrieve from main server through mongodb)
+        - java extract in machine volume
+        - container attach to the directory
+4.  Process
+5.  Upload Output files
+    a.  Inside (upload to main server through api)
+        - python zip file and upload through upload link
+    b.  Outside (save to main server through mongodb)
+        - java save the files in attached volume to mongodb
+6.  Send API to release machine slot
+
+
 
 
 === === === === === === === === === === === === === === === === === === === === === === ===
