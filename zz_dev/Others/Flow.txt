@@ -9,10 +9,6 @@
     c.	date
     d.  encode JSON string
 
-
-
-
-
 3.	push request id to queue, write queue to mongo db for persistency
 4.	gpu machine send api call to get request to process (JAVA)
 5.	pass api address, UID and request id to python docker image. (JAVA)

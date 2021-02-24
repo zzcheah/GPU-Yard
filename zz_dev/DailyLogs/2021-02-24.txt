@@ -1,0 +1,11 @@
+<== 24 Feb 2021 ==>
+
+Backend Queue:
+- Java Queue for popping queue
+- Backup queue in mongoDB
+- Task class for holding information of job in queue
+- update NEW and PROCESSING for request status
+
+-> convert json from React to RequestDetail Java Object
+-> edit the RequestDetail structure to be saved in mongo
+
