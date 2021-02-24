@@ -37,7 +37,7 @@ Idea:
         - python zip file and upload through upload link
     b.  Outside (save to main server through mongodb)
         - java save the files in attached volume to mongodb
-6.  Send API to release machine slot
+6.  Send API call to release machine slot
 
 
 
