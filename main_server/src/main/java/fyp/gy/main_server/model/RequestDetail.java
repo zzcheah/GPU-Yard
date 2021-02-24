@@ -9,6 +9,7 @@ public class RequestDetail {
     private String userID;
     private String requestID;
     private String createdAt;
+    private String title;
     private String encodedParam;
     private List<String> inputFiles;
     private List<String> outputFiles;
@@ -24,6 +25,9 @@ public class RequestDetail {
     }
     public String getCreatedAt() {
         return createdAt;
+    }
+    public String getTitle() {
+        return title;
     }
     public String getEncodedParam() {
         return encodedParam;
@@ -46,6 +50,9 @@ public class RequestDetail {
     }
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
     public void setEncodedParam(String encodedParam) {
         this.encodedParam = encodedParam;

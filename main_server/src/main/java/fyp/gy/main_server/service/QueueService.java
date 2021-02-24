@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
 @Service
 public class QueueService {
 
@@ -48,14 +46,15 @@ public class QueueService {
 
     public String addRequest(Map<String, Object> payload) {
 
-        String title = "temp-month";
-        // TODO: group record by month, get month from createdAt
+        String title = (String) payload.get("title");
+        String requestID = (String) payload.get("requestID");
 
         RequestDetail detail = new RequestDetail();
         detail.setStatus("NEW");
-        detail.setRequestID((String) payload.get("requestID"));
+        detail.setRequestID(requestID);
         detail.setUserID((String) payload.get("userID"));
         detail.setCreatedAt((String) payload.get("createdAt"));
+        detail.setTitle(title);
         detail.setEncodedParam((String) payload.get("param"));
         //noinspection unchecked
         detail.setInputFiles((List<String>) payload.get("inputFiles"));
@@ -77,7 +76,7 @@ public class QueueService {
 
         Task task = new Task();
         task.setTitle(title);
-        task.setRequestID(detail.getRequestID());
+        task.setRequestID(requestID);
         task.setCreatedAt(detail.getCreatedAt());
 
         // Record in mongo for persistency
@@ -95,8 +94,12 @@ public class QueueService {
 
         updateRequestStatus(title,requestID,status);
         // TODO: add remark or error message (consider changing the param to json)
+
+        // delete task from Tasks collection
+        Query q = new Query(Criteria.where("requestID").is(requestID));
+        template.remove(q,"Tasks");
+
         // TODO: notify user
-        // TODO: delete task from Tasks collection
 
         logger.info("Free-ing a slot from machine #" + machineID);
         machineQueue.add(machineID);

@@ -8,4 +8,5 @@ Backend Queue:
 
 -> convert json from React to RequestDetail Java Object
 -> edit the RequestDetail structure to be saved in mongo
+-> remove queue record from mongo after finish processing
 

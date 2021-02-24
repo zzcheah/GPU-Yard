@@ -5,12 +5,10 @@
 Backend Queue:
 - send api call to machine to process the job
 
--> remove queue record from mongo after finish processing (either during machine learning or another api) // tbh
 
 
 Additional:
 -> restore queue from mongo (persistent) after restart
--> update status of request in different phases.
 -> constants for collection names and other repetitive strings.
 
 
@@ -26,3 +24,4 @@ Backend Queue:
 
 -> convert json from React to RequestDetail Java Object
 -> edit the RequestDetail structure to be saved in mongo
+-> remove queue record from mongo after finish processing
