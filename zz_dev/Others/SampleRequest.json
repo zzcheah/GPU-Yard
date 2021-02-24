@@ -1,7 +1,8 @@
 {
-  "id": "12345",
-  "uid": "userid",
+  "requestID": "12345",
+  "userID": "userid",
   "createdAt": "someDate",
+  "param": "some json encoded",
   "inputFiles": [
     "ifID1",
     "ifID2"
@@ -10,5 +11,4 @@
     "ofID1",
     "ofID2"
   ]
-
 }

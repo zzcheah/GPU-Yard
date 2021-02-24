@@ -3,12 +3,8 @@
 === === === === === === === === === === === === === === === === === === === === === === ===
 
 Backend Queue:
-- Java Queue for popping queue
-- Backup queue in mongoDB
 - send api call to machine to process the job
 
--> convert json from React to RequestDetail Java Object
--> edit the RequestDetail structure to be saved in mongo
 -> remove queue record from mongo after finish processing (either during machine learning or another api) // tbh
 
 
@@ -18,29 +14,15 @@ Additional:
 -> constants for collection names and other repetitive strings.
 
 
-
-API:
-- get job/task from queue // canceled
-
-
-
-
-
 === === === === === === === === === === === === === === === === === === === === === === ===
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
-Mongo FS Service:
-- store/retrieve file from db
+Backend Queue:
+- Java Queue for popping queue
+- Backup queue in mongoDB
+- Task class for holding information of job in queue
+- update NEW and PROCESSING for request status
 
-API:
-- upload and download file
-- add request
-- release machine
--
-
-QueueService:
-- 2 blocking queues (job queue and machine queue)
-- polling thread
-- backing API functions
-- round robin job queue for machine selection
+-> convert json from React to RequestDetail Java Object
+-> edit the RequestDetail structure to be saved in mongo

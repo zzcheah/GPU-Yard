@@ -3,10 +3,15 @@
     b.	upload input files (store file in volume / mongo DB)
     c.	enter input param in JSON or XML (store in MongoDB)
 
-2.	server adds metadata  to requests object.
+2.	server adds metadata  to requests object. (for API call)
     a.	File object id
     b.	user id
     c.	date
+    d.  encode JSON string
+
+
+
+
 
 3.	push request id to queue, write queue to mongo db for persistency
 4.	gpu machine send api call to get request to process (JAVA)
@@ -15,18 +20,3 @@
 7.	based on input files including param, construct keras model, build and save
 8.	upload to server (update status)
 9.	notify user
-
-{
-  "id": "12345",
-  "uid": "userid",
-  "createdAt": "someDate",
-  "inputFiles": [
-    "ifID1",
-    "ifID2"
-  ],
-  "outputFiles": [
-    "ofID1",
-    "ofID2"
-  ]
-
-}
