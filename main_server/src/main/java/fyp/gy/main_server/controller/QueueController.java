@@ -21,11 +21,11 @@ public class QueueController {
     }
 
     @PostMapping("/queue/add")
-    public String addRequest(@RequestBody Map<String, Object> payload) {
+    public void addRequest(@RequestBody Map<String, Object> payload) {
 
 
         try {
-            return queueService.addRequest(payload);
+            queueService.addRequest(payload);
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e
@@ -34,15 +34,16 @@ public class QueueController {
     }
 
     @PostMapping("/machine/release")
-    public String releaseMachine(
+    public void releaseMachine(
             @RequestParam("machineID") String machineID,
             @RequestParam("title") String title,
             @RequestParam("requestID") String requestID) {
         try {
             queueService.freeMachine(machineID, title, requestID, "COMPLETED");
-            return "Successfully released a slot from machine #" + machineID;
         } catch (Exception e) {
-            return "Failed to release slot from machine #" + machineID;
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(), e
+            );
         }
     }
 

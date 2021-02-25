@@ -3,20 +3,20 @@
 === === === === === === === === === === === === === === === === === === === === === === ===
 
 Task Worker:
--> API to receive workload
 -> preprocess workload, get related information (API url, etc)
 -> retrieve inputFiles, param
 -> connect to docker daemon
 -> launch container to process the request
+-> append error and remarks to the requests
 
 
 
 Main Server:
--> send api call to machine to process the job
--> restore queue from mongo (persistent) after restart
+-> notify user when finish processing
+
 
 Common (java package to be shared) :
--> constants for collection names and other repetitive strings.
+-> constants for collection names and other repetitive strings. dd-MM-yyyy HH:mm:ss
 -> optimize to reduce redundancy and improve consistency
 
 Additional:
@@ -46,12 +46,12 @@ Idea:
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
-Backend Queue:
-- Java Queue for popping queue
-- Backup queue in mongoDB
-- Task class for holding information of job in queue
-- update NEW and PROCESSING for request status
+Main Server:
+-> send api call to machine to process the job
+-> restore queue from mongo (persistent) after restart (sorted by createdAt)
+-> make Task structure comparable (implement comparable interface)
+-> queue is changed from BlockingQueue to PriorityBlockingQueue
 
--> convert json from React to RequestDetail Java Object
--> edit the RequestDetail structure to be saved in mongo
--> remove queue record from mongo after finish processing
+Task Worker:
+-> initiate task worker module
+-> API to receive workload

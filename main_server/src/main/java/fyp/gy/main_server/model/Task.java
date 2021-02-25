@@ -3,8 +3,12 @@ package fyp.gy.main_server.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Document(collection = "Tasks")
-public class Task {
+public class Task implements Comparable<Task> {
 
     @Id
     private String id;
@@ -36,5 +40,19 @@ public class Task {
     }
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+    @Override
+    public int compareTo(Task o) {
+        try {
+            Date d1 = formatter.parse(this.getCreatedAt());
+            Date d2 = formatter.parse(o.getCreatedAt());
+            return d1.compareTo(d2);
+        } catch (ParseException e) {
+            return 0;
+        }
+
     }
 }
