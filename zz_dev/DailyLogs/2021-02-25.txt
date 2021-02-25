@@ -1,0 +1,12 @@
+<== 25 Feb 2021 ==>
+
+Main Server:
+-> learn and implement Spring WebClient for API calls
+-> send api call to machine to process the job
+-> restore queue from mongo (persistent) after restart (sorted by createdAt)
+-> make Task structure comparable (implement comparable interface)
+-> queue is changed from BlockingQueue to PriorityBlockingQueue
+
+Task Worker:
+-> initiate task worker module
+-> API to receive workload
