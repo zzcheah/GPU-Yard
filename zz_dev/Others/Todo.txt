@@ -11,15 +11,13 @@ Task Worker:
 
 
 
-Main Server:
--> notify user when finish processing
-
 
 Common (java package to be shared) :
 -> constants for collection names and other repetitive strings. dd-MM-yyyy HH:mm:ss
 -> optimize to reduce redundancy and improve consistency
 
 Additional:
+-> notify user when finish processing
 -> how task workers know the address of main server
 -> design inputFiles folder hierarchy (should use zip)
 Idea:
