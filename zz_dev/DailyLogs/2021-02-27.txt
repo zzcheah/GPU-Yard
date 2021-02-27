@@ -1,0 +1,8 @@
+<== 27 Feb 2021 ==>
+
+- bottleneck on connecting the docker daemon due to several factor:
+    1. developing module using WSL2
+    2. trying out different options
+    3. consideration on running it on windows and linux
+    4. lack of documentation for the java library options
+    5. only unofficial libraries for integration between java and docker
