@@ -1,0 +1,21 @@
+
+<== local python in docker ==>
+
+docker run --runtime=nvidia -it --network="host"  tensorflow/tensorflow:latest-gpu-py3-jupyter bash
+
+<== getFile template ==>
+
+import requests
+from io import BytesIO
+from zipfile import ZipFile
+
+res = requests.get('http://192.168.0.123:8080/files/603cd52990d01d5a0929dd8e')
+zipFile = ZipFile(BytesIO(res.content))
+zipFile.extractall("/tf/")
+
+
+
+
+
+
+
