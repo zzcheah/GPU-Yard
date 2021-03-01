@@ -1,0 +1,15 @@
+<== 1 Mar 2021 ==>
+
+Task Worker:
+-> connect to docker daemon
+-> redefine docker endpoint for different OS (windows with WSL and Linux)
+-> docker-related functions (check before pull image)
+->
+
+MLaaS logic:
+-> download zip file from main server and unzip it (tested with flat hierarchy)
+-> tested if tensorflow running using GPU
+-> tested running a few tensorflow operations that uses GPU processing power
+-> successfully build a model based on the following tutorial:
+:: https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/quickstart/beginner.ipynb#scrollTo=7FP5258xjs-v
+-> abel to save the model

@@ -1,0 +1,8 @@
+<== 28 Feb 2021 ==>
+
+Task Worker:
+- continue learning and explore docker
+- try different config for setting up docker-java client
+- port binding tested working
+- able to pull and run container from pulled or existing docker images
+- test if container runs on gpu
