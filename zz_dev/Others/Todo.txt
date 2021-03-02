@@ -3,14 +3,18 @@
 === === === === === === === === === === === === === === === === === === === === === === ===
 
 MLaaS Logic:
--> test zip with hierarchy
--> upload files to main server after zip
+-> sample MLaaS logic (build model from extracted files and input params)
+-> prebuild functions/scripts
+   1.   download input zip and extract the files
+   2.   decode json param
+   3.   upload output zip
+   4.   call api to release machine along with remarks
+
 
 Task Worker:
--> preprocess workload, get related information (API url, etc)
--> retrieve inputFiles, param
--> launch container to process the request
--> append error and remarks to the requests
+-> API to receive requestID
+-> retrieve docker image and encoded json param from request
+-> pass main server API urls to the container
 
 
 Common (java package to be shared) :
@@ -20,23 +24,6 @@ Common (java package to be shared) :
 Additional:
 -> notify user when finish processing
 -> how task workers know the address of main server
--> design inputFiles folder hierarchy (should use zip)
-Idea:
-1.  zip in a specific tree
-2.  extract inside/outside container to be determined
-3.  Extraction
-    a.  Inside (download from main server through api)
-        - python extract in volume within container
-    b.  Outside (retrieve from main server through mongodb)
-        - java extract in machine volume
-        - container attach to the directory
-4.  Process
-5.  Upload Output files
-    a.  Inside (upload to main server through api)
-        - python zip file and upload through upload link
-    b.  Outside (save to main server through mongodb)
-        - java save the files in attached volume to mongodb
-6.  Send API call to release machine slot
 
 
 
@@ -45,18 +32,11 @@ Idea:
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
-Main Server:
-
 Task Worker:
--> connect to docker daemon
--> redefine docker endpoint for different OS (windows with WSL and Linux)
--> docker-related functions (check before pull image)
-->
+-> pass encoded json param as environment variables in the container
+
 
 MLaaS logic:
--> download zip file from main server and unzip it (tested with flat hierarchy)
--> tested if tensorflow running using GPU
--> tested running a few tensorflow operations that uses GPU processing power
--> successfully build a model based on the following tutorial:
-:: https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/quickstart/beginner.ipynb#scrollTo=7FP5258xjs-v
--> abel to save the model
+-> test zip with hierarchy
+-> upload files to main server after zip
+-> retrieve and decode encoded json param

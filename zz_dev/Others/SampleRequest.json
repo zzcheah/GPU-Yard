@@ -1,5 +1,4 @@
 {
-  "requestID": "12345",
   "userID": "userid",
   "createdAt": "someDate",
   "param": "some json encoded",

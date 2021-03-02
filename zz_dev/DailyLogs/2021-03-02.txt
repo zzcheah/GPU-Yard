@@ -1,0 +1,10 @@
+<== 2 Mar 2021 ==>
+
+Task Worker:
+-> pass encoded json param as environment variables in the container
+
+
+MLaaS logic:
+-> test zip with hierarchy
+-> upload files to main server after zip
+-> retrieve and decode encoded json param

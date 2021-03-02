@@ -45,9 +45,32 @@ public class DockerService {
 
         dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
+//        try {
+//            pullImage("tensorflow/tensorflow", "latest-gpu");
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         try {
-            pullImage("tensorflow/tensorflow", "latest-gpu");
-        } catch (InterruptedException e) {
+            String env_Var = "inputParam";
+            String encodedJson = "ewogICJpbnB1dCI6IHsKICAgICJzaGFwZSI6ICIoMywzLDIpIgogIH0sCiAgImxheWVycyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiRGVuc2UiLAogICAgICAibnVtX25vZGUiOiA0LAogICAgICAiYWN0aXZhdGlvbiI6ICJyZWx1IgogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiRGVuc2UiLAogICAgICAibnVtX25vZGUiOiAyLAogICAgICAiYWN0aXZhdGlvbiI6ICJzb2Z0bWF4IgogICAgfQogIF0sCiAgIm1ldHJpYyI6ICJhY2N1cmFjeSIKfQ==";
+
+            String imageWithTag = "tensorflow/tensorflow:latest-gpu";
+            HostConfig hostConfig = new HostConfig()
+                    .withRuntime("nvidia")
+                    .withNetworkMode("host");
+
+
+            String id = dockerClient.createContainerCmd(imageWithTag)
+                    .withHostConfig(hostConfig)
+//                    .withCmd("bash")
+                    .withStdinOpen(true)
+                    .withEnv(String.format("%s=%s",env_Var,encodedJson))
+                    .exec().getId();
+
+            dockerClient.startContainerCmd(id).exec();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

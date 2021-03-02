@@ -5,15 +5,30 @@ docker run --runtime=nvidia -it --network="host"  tensorflow/tensorflow:latest-g
 
 <== getFile template ==>
 
+import io
 import requests
+import base64
+import json
 from io import BytesIO
 from zipfile import ZipFile
 
-res = requests.get('http://192.168.0.123:8080/files/603cd52990d01d5a0929dd8e')
+res = requests.get('http://192.168.0.123:8080/files/603dfb4aeeb42f6d40429e93')
 zipFile = ZipFile(BytesIO(res.content))
 zipFile.extractall("/tf/")
 
+inputParam = json.loads(base64.b64decode(os.environ['inputParam']))
 
+
+
+
+===
+== processes
+===
+
+url = 'http://192.168.0.123:8080/files/add'
+filename = 'outputFileName'
+outputFile = open("/tf/main.py",'rb')
+postReq = requests.post(url, files = {filename:outputFile })
 
 
 
