@@ -21,11 +21,11 @@ public class QueueController {
     }
 
     @PostMapping("/queue/add")
-    public void addRequest(@RequestBody Map<String, Object> payload) {
+    public String addRequest(@RequestBody Map<String, Object> payload) {
 
 
         try {
-            queueService.addRequest(payload);
+            return queueService.addRequest(payload);
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e
@@ -36,10 +36,9 @@ public class QueueController {
     @PostMapping("/machine/release")
     public void releaseMachine(
             @RequestParam("machineID") String machineID,
-            @RequestParam("title") String title,
             @RequestParam("requestID") String requestID) {
         try {
-            queueService.freeMachine(machineID, title, requestID, "COMPLETED");
+            queueService.freeMachine(machineID, requestID, "COMPLETED");
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e

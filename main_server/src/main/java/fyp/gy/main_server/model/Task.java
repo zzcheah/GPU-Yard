@@ -12,15 +12,11 @@ public class Task implements Comparable<Task> {
 
     @Id
     private String id;
-    private String title;
     private String requestID;
     private String createdAt;
 
     public String getId() {
         return id;
-    }
-    public String getTitle() {
-        return title;
     }
     public String getRequestID() {
         return requestID;
@@ -31,9 +27,6 @@ public class Task implements Comparable<Task> {
 
     public void setId(String id) {
         this.id = id;
-    }
-    public void setTitle(String title) {
-        this.title = title;
     }
     public void setRequestID(String requestID) {
         this.requestID = requestID;

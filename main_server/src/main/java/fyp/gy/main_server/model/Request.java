@@ -1,27 +1,33 @@
 package fyp.gy.main_server.model;
 
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestDetail {
+@Document(collection = "Requests")
+public class Request {
+
+    @Id
+    private String id;
     private String status;
     private String userID;
-    private String requestID;
     private String createdAt;
     private String title;
     private String encodedParam;
     private List<String> inputFiles;
     private List<String> outputFiles;
 
+    public String getId() {
+        return id;
+    }
     public String getStatus() {
         return status;
     }
     public String getUserID() {
         return userID;
-    }
-    public String getRequestID() {
-        return requestID;
     }
     public String getCreatedAt() {
         return createdAt;
@@ -39,14 +45,14 @@ public class RequestDetail {
         return outputFiles!=null? outputFiles: new ArrayList<>();
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public void setStatus(String status) {
         this.status = status;
     }
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-    public void setRequestID(String requestID) {
-        this.requestID = requestID;
     }
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
