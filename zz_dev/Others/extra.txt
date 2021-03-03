@@ -14,3 +14,28 @@ Idea:
     b.  Outside (save to main server through mongodb)
         - java save the files in attached volume to mongodb
 6.  Send API call to release machine slot
+
+
+
+
+Current flow:
+
+- Start mongo db
+- start docker daemon
+
+- add file (get id)
+- send request
+
+- main server pool request from job queue
+- check for machine queue to see machine availability
+- free machine to allow the machine to process job
+- send request to free machine to process
+
+- task worker (machine) preprocess request
+- launch related container from image
+
+- run script to download input file
+- decode json input param
+- process request
+- save model
+- upload through upload link

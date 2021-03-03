@@ -37,9 +37,14 @@ public class QueueService {
             logger.info("Checking for job in queue...");
             try {
                 Task task = jobQueue.take();
-                assignJob(task.getRequestID());
+                try {
+                    assignJob(task.getRequestID());
+                } catch (Exception e) {
+                    jobQueue.add(task);
+                    e.printStackTrace();
+                }
             } catch (InterruptedException e) {
-                logger.error("fail polling request (QueueService)");
+                logger.error("fail polling request (QueueService): "+ e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -102,7 +107,7 @@ public class QueueService {
 
     }
 
-    private void assignJob(String requestID) {
+    private void assignJob(String requestID) throws Exception {
 
         // can use priority blocking queue for smarting machine allocation
         boolean assigned = false;
@@ -130,6 +135,7 @@ public class QueueService {
             } catch (Exception e) {
                 updateRequestStatus(requestID, "FAILED ALLOCATING MACHINE");
                 logger.error(e.getMessage());
+                throw e;
 //                e.printStackTrace();
             }
 
