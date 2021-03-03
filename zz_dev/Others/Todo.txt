@@ -3,23 +3,17 @@
 === === === === === === === === === === === === === === === === === === === === === === ===
 
 MLaaS Logic:
--> sample MLaaS logic (build model from extracted files and input params)
 -> prebuild functions/scripts
-   1.   download input zip and extract the files
-   2.   decode json param
    3.   upload output zip
    4.   call api to release machine along with remarks
 
 
 Task Worker:
--> API to receive requestID
--> retrieve docker image and encoded json param from request
 -> pass main server API urls to the container
 
 
 Common (java package to be shared) :
 -> constants for collection names and other repetitive strings. dd-MM-yyyy HH:mm:ss
--> optimize to reduce redundancy and improve consistency
 
 Additional:
 -> notify user when finish processing
@@ -32,11 +26,22 @@ Additional:
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
+Common:
+-> optimize to reduce redundancy and improve consistency
+-> some collection constants added
+
+
 Task Worker:
--> pass encoded json param as environment variables in the container
+-> docker client is now a bean instead of serving as a whole service
+-> Rest controller and service adjustments
+-> API to receive requestID
+-> retrieve docker image and encoded json param from request
+
 
 
 MLaaS logic:
--> test zip with hierarchy
--> upload files to main server after zip
--> retrieve and decode encoded json param
+-> simple MLaaS logic (binary classifier)
+-> prebuild functions/scripts (2 more to go)
+   1.   download input zip and extract the files
+   2.   decode json param
+-> build model from extracted files and input params

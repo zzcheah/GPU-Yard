@@ -1,0 +1,21 @@
+<== 3 Mar 2021 ==>
+
+Common:
+-> optimize to reduce redundancy and improve consistency
+-> some collection constants added
+
+
+Task Worker:
+-> docker client is now a bean instead of serving as a whole service
+-> Rest controller and service adjustments
+-> API to receive requestID
+-> retrieve docker image and encoded json param from request
+
+
+
+MLaaS logic:
+-> simple MLaaS logic (binary classifier)
+-> prebuild functions/scripts (2 more to go)
+   1.   download input zip and extract the files
+   2.   decode json param
+-> build model from extracted files and input params
