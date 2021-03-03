@@ -1,4 +1,4 @@
-package fyp.gy.main_server.model;
+package fyp.gy.common.model;
 
 
 import org.springframework.data.annotation.Id;
@@ -16,6 +16,7 @@ public class Request {
     private String userID;
     private String createdAt;
     private String title;
+    private String image;
     private String encodedParam;
     private List<String> inputFiles;
     private List<String> outputFiles;
@@ -34,6 +35,9 @@ public class Request {
     }
     public String getTitle() {
         return title;
+    }
+    public String getImage() {
+        return image;
     }
     public String getEncodedParam() {
         return encodedParam;
@@ -59,6 +63,9 @@ public class Request {
     }
     public void setTitle(String title) {
         this.title = title;
+    }
+    public void setImage(String image) {
+        this.image = image;
     }
     public void setEncodedParam(String encodedParam) {
         this.encodedParam = encodedParam;

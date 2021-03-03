@@ -18,13 +18,12 @@ public class TaskController {
     // title requestID
     @PostMapping("/process")
     public String processRequest(
-            @RequestParam("title") String title,
             @RequestParam("requestID") String requestID) {
         try {
-            taskService.process(title, requestID);
-            return "Request #" + requestID + " (" + title + ")" + " is being processed";
+            taskService.process(requestID);
+            return "Request #" + requestID + " is being processed";
         } catch (Exception e) {
-            return "Failed to process Request #" + requestID + " (" + title + ")";
+            return "Failed to process Request #" + requestID + "\n" + e.getMessage();
         }
     }
 

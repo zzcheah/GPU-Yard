@@ -2,7 +2,7 @@ package fyp.gy.main_server.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import fyp.gy.main_server.model.Request;
+import fyp.gy.common.model.Request;
 import fyp.gy.main_server.model.Task;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
