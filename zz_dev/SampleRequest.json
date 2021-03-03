@@ -1,6 +1,8 @@
 {
   "userID": "userid",
   "createdAt": "someDate",
+  "title": "someTitle",
+  "image": "tensorflow/tensorflow:latest-gpu",
   "param": "some json encoded",
   "inputFiles": [
     "ifID1",

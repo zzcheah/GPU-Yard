@@ -1,0 +1,11 @@
+{
+  "batch_size": 32,
+  "epochs": 10,
+  "seed": 42,
+  "validation_split": 0.2,
+  "max_features": 10000,
+  "sequence_length": 250,
+  "embedding_dim": 16,
+  "loss": "binary_crossentropy",
+  "optimizer": "adam"
+}

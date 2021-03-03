@@ -2,10 +2,11 @@
 <== local python in docker ==>
 
 docker run --runtime=nvidia -it --network="host"  tensorflow/tensorflow:latest-gpu-py3-jupyter bash
+docker run --runtime=nvidia -it --network="host"  zz:proto python '/tf/gyrun.py'
 
 <== getFile template ==>
 
-import io
+import os
 import requests
 import base64
 import json
@@ -33,4 +34,30 @@ postReq = requests.post(url, files = {filename:outputFile })
 
 
 
+
+print("Running!!")
+downloadURL = "http://192.168.0.121:8080/files/603fe0cd0407ac653c0d0900"
+uploadURL = "http://192.168.0.121:8080/files/add"
+res = requests.get(downloadURL)
+zip_file = ZipFile(BytesIO(res.content))
+print("extracting files")
+zip_file.extractall("/tf/")
+haha = "ewogICJiYXRjaF9zaXplIjogMzIsCiAgImVwb2NocyI6IDEwLAogICJzZWVkIjogNDIsCiAgInZhbGlkYXRpb25fc3BsaXQiOiAwLjIsCiAgIm1heF9mZWF0dXJlcyI6IDEwMDAwLAogICJzZXF1ZW5jZV9sZW5ndGgiOiAyNTAsCiAgImVtYmVkZGluZ19kaW0iOiAxNiwKICAibG9zcyI6ICJiaW5hcnlfY3Jvc3NlbnRyb3B5IiwKICAib3B0aW1pemVyIjogImFkYW0iCn0"
+
+input_param = json.loads(base64.b64decode(haha))
+
+print(e)
+print('failed getting environment variables...')
+print('using mock variables')
+input_param = json.loads('''{
+  "batch_size": 32,
+  "epochs": 10,
+  "seed": 42,
+  "validation_split": 0.2,
+  "max_features": 10000,
+  "sequence_length": 250,
+  "embedding_dim": 16,
+  "loss": "binary_crossentropy",
+  "optimizer": "adam"
+}''')
 
