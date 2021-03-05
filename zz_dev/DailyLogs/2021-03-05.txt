@@ -1,0 +1,11 @@
+<== 5 Mar 2021 ==>
+
+Common (java package to be shared) :
+-> constants for collection names and other repetitive strings. dd-MM-yyyy HH:mm:ss
+
+Netflix Eureka:
+-> added eureka module for eureka server setup
+-> register main server and task worker with eureka server
+-> mock API to test dynamic hostname API calls
+-> successfully mapped dynamic host through eureka
+-> how task workers know the address of main server
