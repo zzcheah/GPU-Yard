@@ -1,9 +1,10 @@
 package fyp.gy.main_server.model;
 
+import fyp.gy.common.constant.GyConstant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "Users")
+@Document(collection = GyConstant.USERS_COLLECTION)
 public class User {
 
     @Id

@@ -1,5 +1,6 @@
 package fyp.gy.main_server.model;
 
+import fyp.gy.common.constant.GyConstant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Document(collection = "Tasks")
+@Document(collection = GyConstant.TASKS_COLLECTION)
 public class Task implements Comparable<Task> {
 
     @Id
@@ -35,7 +36,7 @@ public class Task implements Comparable<Task> {
         this.createdAt = createdAt;
     }
 
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat(GyConstant.DATE_TIME_FORMAT);
 
     @Override
     public int compareTo(Task o) {

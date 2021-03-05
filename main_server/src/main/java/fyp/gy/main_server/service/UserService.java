@@ -1,5 +1,6 @@
 package fyp.gy.main_server.service;
 
+import fyp.gy.common.constant.GyConstant;
 import fyp.gy.main_server.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class UserService {
         try {
             User user = new User();
             user.setName(name);
-            return template.save(user, "Users");
+            return template.save(user, GyConstant.USERS_COLLECTION);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
@@ -36,7 +37,7 @@ public class UserService {
         logger.info("Finding for user " + id + " ...");
 
         try {
-            return template.findById(id, User.class, "Users");
+            return template.findById(id, User.class, GyConstant.USERS_COLLECTION);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;

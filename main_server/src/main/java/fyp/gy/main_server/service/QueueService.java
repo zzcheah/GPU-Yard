@@ -2,6 +2,7 @@ package fyp.gy.main_server.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import fyp.gy.common.constant.GyConstant;
 import fyp.gy.common.model.Request;
 import fyp.gy.main_server.model.Task;
 import org.bson.types.ObjectId;
@@ -76,14 +77,14 @@ public class QueueService {
         //noinspection unchecked
         detail.setInputFiles((List<String>) payload.get("inputFiles"));
 
-        detail = template.insert(detail, "Requests");
+        detail = template.insert(detail, GyConstant.REQUESTS_COLLECTION);
 
         Task task = new Task();
         task.setRequestID(detail.getId());
         task.setCreatedAt(detail.getCreatedAt());
 
         // Record in mongo for persistency
-        template.insert(task, "Tasks");
+        template.insert(task, GyConstant.TASKS_COLLECTION);
 
         // Volatile job queue
         jobQueue.add(task);
@@ -147,14 +148,14 @@ public class QueueService {
 
         Query q = new Query(Criteria.where("_id").is(new ObjectId(requestID)));
         Update u = new Update().set("status", status);
-        UpdateResult result = template.updateFirst(q, u, "Requests");
+        UpdateResult result = template.updateFirst(q, u, GyConstant.REQUESTS_COLLECTION);
         System.out.println(result.getModifiedCount());
 
     }
 
     private void restoreQueue() {
 
-        List<Task> jobRestored = template.findAll(Task.class, "Tasks");
+        List<Task> jobRestored = template.findAll(Task.class, GyConstant.TASKS_COLLECTION);
 //        Collections.sort(jobRestored);
 
         if (jobRestored.size() != 0) {
@@ -167,7 +168,7 @@ public class QueueService {
     private void clearTask(String requestID) {
 
         Query q = new Query(Criteria.where("requestID").is(requestID));
-        DeleteResult d = template.remove(q, "Tasks");
+        DeleteResult d = template.remove(q, GyConstant.TASKS_COLLECTION);
         if (d.getDeletedCount() != 0)
             logger.warn(String.format("Task #%s was not removed from Tasks Collection", requestID));
         else
