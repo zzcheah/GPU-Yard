@@ -2,10 +2,12 @@ package fyp.gy.task_worker.service;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.HostConfig;
+import com.netflix.discovery.EurekaClient;
 import fyp.gy.common.constant.GyConstant;
 import fyp.gy.common.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +18,17 @@ public class TaskService {
 
     Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-    DockerClient dockerClient;
-    HostConfig hostConfig;
+    private final DockerClient dockerClient;
+    private final HostConfig hostConfig;
+    private final EurekaClient eurekaClient;
 
     private final MongoTemplate template;
 
-    public TaskService(MongoTemplate template, DockerClient dockerClient) {
+    public TaskService(MongoTemplate template, DockerClient dockerClient, @Qualifier("eurekaClient") EurekaClient eurekaClient) {
         this.template = template;
+        this.eurekaClient = eurekaClient;
         this.dockerClient = dockerClient;
+
         dockerClient.pingCmd();
         hostConfig = new HostConfig()
                 .withRuntime("nvidia")
@@ -34,17 +39,18 @@ public class TaskService {
         String inputParam = "ewogICJiYXRjaF9zaXplIjogMzIsCiAgImVwb2NocyI6IDEwLAogICJzZWVkIjogNDIsCiAgInZhbGlkYXRpb25fc3BsaXQiOiAwLjIsCiAgIm1heF9mZWF0dXJlcyI6IDEwMDAwLAogICJzZXF1ZW5jZV9sZW5ndGgiOiAyNTAsCiAgImVtYmVkZGluZ19kaW0iOiAxNiwKICAibG9zcyI6ICJiaW5hcnlfY3Jvc3NlbnRyb3B5IiwKICAib3B0aW1pemVyIjogImFkYW0iCn0=";
 
 
-        String containerID = dockerClient.createContainerCmd("zz:proto2")
-                .withHostConfig(hostConfig)
-                .withEnv(
-                        String.format("inputParam=%s", inputParam),
-                        String.format("downloadURL=%s", downloadURL),
-                        String.format("uploadURL=%s", uploadURL))
-//                .withCmd("bash")
-//                .withStdinOpen(true)
-                .exec().getId();
+//        String containerID = dockerClient.createContainerCmd("zz:proto2")
+//                .withHostConfig(hostConfig)
+//                .withEnv(
+//                        String.format("inputParam=%s", inputParam),
+//                        String.format("downloadURL=%s", downloadURL),
+//                        String.format("uploadURL=%s", uploadURL))
+////                .withCmd("bash")
+////                .withStdinOpen(true)
+//                .exec().getId();
+//
+//        dockerClient.startContainerCmd(containerID).exec();
 
-        dockerClient.startContainerCmd(containerID).exec();
 
 
     }

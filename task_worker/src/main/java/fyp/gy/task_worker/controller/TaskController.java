@@ -20,7 +20,7 @@ public class TaskController {
     public String processRequest(
             @RequestParam("requestID") String requestID) {
         try {
-            taskService.process(requestID);
+//            taskService.process(requestID);
             return "Request #" + requestID + " is being processed";
         } catch (Exception e) {
             return "Failed to process Request #" + requestID + "\n" + e.getMessage();
