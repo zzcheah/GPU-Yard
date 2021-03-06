@@ -45,18 +45,15 @@ public class QueueService {
                     e.printStackTrace();
                 }
             } catch (InterruptedException e) {
-                logger.error("fail polling request (QueueService): "+ e.getMessage());
+                logger.error("fail polling request (QueueService): " + e.getMessage());
                 e.printStackTrace();
             }
         }
     });
 
-    public QueueService(
-            MongoTemplate template,
-            @Value("${gy.machine1}") String machineUrl
-    ) {
+    public QueueService(MongoTemplate template) {
         this.template = template;
-        this.client = WebClient.create(machineUrl);
+        this.client = WebClient.create("http://localhost:8181");
 
         // restore queue from mongoDB
         restoreQueue();
@@ -110,7 +107,7 @@ public class QueueService {
 
     private void assignJob(String requestID) throws Exception {
 
-        // can use priority blocking queue for smarting machine allocation
+        // can use priority blocking queue for smart machine allocation
         boolean assigned = false;
 
         while (!assigned) {
