@@ -1,6 +1,6 @@
 package fyp.gy.main_server.controller;
 
-import fyp.gy.main_server.service.QueueService;
+import fyp.gy.main_server.service.RequestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,20 +12,18 @@ import java.util.Map;
 
 
 @RestController
-public class QueueController {
+public class RequestController {
 
-    private final QueueService queueService;
+    private final RequestService requestService;
 
-    public QueueController(QueueService queueService) {
-        this.queueService = queueService;
+    public RequestController(RequestService requestService) {
+        this.requestService = requestService;
     }
 
-    @PostMapping("/queue/add")
+    @PostMapping("/request/add")
     public String addRequest(@RequestBody Map<String, Object> payload) {
-
-
         try {
-            return queueService.addRequest(payload);
+            return requestService.addRequest(payload);
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e
@@ -33,12 +31,13 @@ public class QueueController {
         }
     }
 
-    @PostMapping("/machine/release")
-    public void releaseMachine(
-            @RequestParam("machineID") String machineID,
-            @RequestParam("requestID") String requestID) {
+    @PostMapping("/request/complete")
+    public void completeRequest(
+            @RequestParam("requestID") String requestID,
+            @RequestParam("machineID") String machineID) {
+
         try {
-            queueService.freeMachine(machineID, requestID, "COMPLETED");
+            requestService.completeRequest(requestID, machineID,"some remark");
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e

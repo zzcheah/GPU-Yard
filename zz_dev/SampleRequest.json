@@ -1,15 +1,11 @@
 {
-  "userID": "userid",
-  "createdAt": "someDate",
-  "title": "someTitle",
+  "userID": "zzcheah",
+  "createdAt": "30-10-2022 10:25:16",
+  "title": "March 2021",
   "image": "tensorflow/tensorflow:latest-gpu",
-  "param": "some json encoded",
+  "param": "ewogICJiYXRjaF9zaXplIjogMzIsCiAgImVwb2NocyI6IDEwLAogICJzZWVkIjogNDIsCiAgInZhbGlkYXRpb25fc3BsaXQiOiAwLjIsCiAgIm1heF9mZWF0dXJlcyI6IDEwMDAwLAogICJzZXF1ZW5jZV9sZW5ndGgiOiAyNTAsCiAgImVtYmVkZGluZ19kaW0iOiAxNiwKICAibG9zcyI6ICJiaW5hcnlfY3Jvc3NlbnRyb3B5IiwKICAib3B0aW1pemVyIjogImFkYW0iCn0=",
   "inputFiles": [
     "ifID1",
     "ifID2"
-  ],
-  "outputFiles": [
-    "ofID1",
-    "ofID2"
   ]
 }

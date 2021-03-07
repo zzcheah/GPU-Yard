@@ -19,22 +19,21 @@ public class TaskService {
 
     Logger logger = LoggerFactory.getLogger(TaskService.class);
 
+    // Autowired
     private final DockerClient dockerClient;
     private final HostConfig hostConfig;
-    private final EurekaClient eurekaClient;
-
     private final MongoTemplate template;
+
+    // internal use
     private final String downloadPrefix;
     private final String uploadURL;
 
     public TaskService(
             MongoTemplate template,
             DockerClient dockerClient,
-            @Qualifier("eurekaClient")
-                    EurekaClient eurekaClient
-    ) {
+            @Qualifier("eurekaClient") EurekaClient eurekaClient) throws Exception {
+
         this.template = template;
-        this.eurekaClient = eurekaClient;
         this.dockerClient = dockerClient;
 
         dockerClient.pingCmd();
@@ -42,12 +41,39 @@ public class TaskService {
                 .withRuntime("nvidia")
                 .withNetworkMode("host");
 
-        InstanceInfo app = eurekaClient.getApplication("MAIN_SERVER").getInstances().get(0);
-        String ip_addr = app.getIPAddr();
-        int port = app.getPort();
-        this.downloadPrefix =  String.format("http://%s:%d/files/",ip_addr,port);
-        this.uploadURL = String.format("http://%s:%d/files/add",ip_addr,port);
-        logger.info(String.format("MainServer : %s:%s", ip_addr,port));
+        InstanceInfo serv;
+
+        try {
+            serv = eurekaClient.getApplication("MAIN_SERVER").getInstances().get(0);
+        } catch (Exception e) {
+            throw new Exception("MainServer not running");
+        }
+
+        String ip_addr = serv.getIPAddr();
+        int port = serv.getPort();
+        this.downloadPrefix = String.format("http://%s:%d/files/", ip_addr, port);
+        this.uploadURL = String.format("http://%s:%d/files/add", ip_addr, port);
+        logger.info(String.format("MainServer : %s:%s", ip_addr, port));
+
+
+        String downloadURL = "http://192.168.0.121:8080/files/603fe0cd0407ac653c0d0900";
+
+        try {
+            String containerID = dockerClient.createContainerCmd("zz:proto")
+                    .withHostConfig(hostConfig)
+                    .withStdinOpen(true)
+                    .withEnv(
+                            String.format("inputParam=%s", "ewogICJiYXRjaF9zaXplIjogMzIsCiAgImVwb2NocyI6IDEwLAogICJzZWVkIjogNDIsCiAgInZhbGlkYXRpb25fc3BsaXQiOiAwLjIsCiAgIm1heF9mZWF0dXJlcyI6IDEwMDAwLAogICJzZXF1ZW5jZV9sZW5ndGgiOiAyNTAsCiAgImVtYmVkZGluZ19kaW0iOiAxNiwKICAibG9zcyI6ICJiaW5hcnlfY3Jvc3NlbnRyb3B5IiwKICAib3B0aW1pemVyIjogImFkYW0iCn0"),
+                            String.format("downloadURL=%s", downloadURL),
+                            String.format("uploadURL=%s", uploadURL)
+                    ).exec().getId();
+
+            System.out.println("done creating docker");
+            dockerClient.startContainerCmd(containerID).exec();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -64,6 +90,7 @@ public class TaskService {
 
         System.out.println(downloadURL);
         System.out.println(uploadURL);
+        logger.info(req.getImage());
 
         String containerID = dockerClient.createContainerCmd(req.getImage())
                 .withHostConfig(hostConfig)
@@ -79,7 +106,6 @@ public class TaskService {
 //        dockerClient.copyArchiveToContainerCmd(containerID)
 //                .withHostResource("")
 //                .exec();
-
 
 
     }
