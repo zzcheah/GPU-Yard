@@ -1,0 +1,13 @@
+<== 7 Mar 2021 ==>
+
+Task Worker:
+-> pass main server API urls to the container
+
+-> added machine service and controller
+-> better separate for better visibility
+-> dynamic IP address tested working
+-> optimize code
+-> refactor some API endpoint
+
+*** Critical ***
+-> error running container after windows update

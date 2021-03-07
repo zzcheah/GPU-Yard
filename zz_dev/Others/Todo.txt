@@ -7,28 +7,25 @@ MLaaS Logic:
    3.   upload output zip
    4.   call api to release machine along with remarks
 
-
-Task Worker:
--> pass main server API urls to the container
-
-
 Additional:
 -> notify user when finish processing
 
-
+*** Critical ***
+-> error running container after windows update
 
 
 === === === === === === === === === === === === === === === === === === === === === === ===
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
-Common (java package to be shared) :
--> constants for collection names and other repetitive strings. dd-MM-yyyy HH:mm:ss
+Task Worker:
+-> pass main server API urls to the container
 
-Netflix Eureka:
--> added eureka module for eureka server setup
--> register main server and task worker with eureka server
--> mock API to test dynamic hostname API calls
--> successfully mapped dynamic host through eureka
--> how task workers know the address of main server
+-> added machine service and controller
+-> better separate for better visibility
+-> dynamic IP address tested working
+-> optimize code
+-> refactor some API endpoint
 
+*** Critical ***
+-> error running container after windows update
