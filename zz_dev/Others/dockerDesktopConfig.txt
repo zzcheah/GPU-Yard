@@ -1,0 +1,19 @@
+{
+  "registry-mirrors": [],
+  "insecure-registries": [],
+  "debug": false,
+  "experimental": false,
+  "features": {
+    "buildkit": true
+  },
+  "runtimes": {
+    "nvidia": {
+      "path": "nvidia-container-runtime",
+      "runtimeArgs": []
+    }
+  },
+  "hosts": [
+    "tcp://0.0.0.0:2375",
+    "unix:///var/run/docket.sock"
+  ]
+}
