@@ -1,18 +1,51 @@
-1.	user modifies request configurations.
-    a.	manually choose GPU or auto (default to auto, start with auto only)
-    b.	upload input files (store file in volume / mongo DB)
-    c.	enter input param in JSON or XML (store in MongoDB)
+Set Up:
+1.  Start MongoDB
+2.  Start Docker Daemon
+3.  Start Eureka Server
+4.  Start MainServer
+5.  Start TaskWorker
 
-2.	server adds metadata  to requests object. (for API call)
-    a.	File object id
-    b.	user id
-    c.	date
-    d.  encode JSON string
 
-3.	push request id to queue, write queue to mongo db for persistency
-4.	gpu machine send api call to get request to process (JAVA)
-5.	pass api address, UID and request id to python docker image. (JAVA)
-6.	python docker container download input files
-7.	based on input files including param, construct keras model, build and save
-8.	upload to server (update status)
-9.	notify user
+Flow:
+(Main Server - frontend)
+1.  User chooses Docker Image (each image has its own functionality)
+2.  User enters parameters required for the docker image
+3.  User enter zipped file
+4.  User submit request
+
+(Main Server - backend)
+5.  Request registered into mongoDB collections (REQUESTS & TASKS)
+6.  Request added into in memory queue (blocking queue)
+
+(Main Server - pooling thread)
+7.  Constantly checking for job in queue (thread blocked when nothing in queue until the thread is notified)
+8.  MachineID is pooled from a machine queue to process the job pooled
+9.  Send API request to the selected machine
+10. Assign to next machineID in queue if API response has error
+11. Update request status to 'PROCESSING'
+
+(Task Worker)
+12. Received requestID from Main Server
+13. Retrieve request details from MongoDB
+    a.  Docker Image
+    b.  Encoded JSON parameters
+    c.  Input File ID
+14. Create a docker container from the docker image with the following environment variables:
+    a.  Download url for zipped input files
+    b.  Upload url to store zipped output files after done processing
+    c.  Encoded JSON parameter
+15. Add script file into container
+16. Launch the container to process the request
+
+(Inside docker container)
+17. importing the script does the following:
+    a.  download file
+    b.  provide functions to upload output file
+    c.  decode JSON parameters
+18. run the Machine learning logic
+19. upload output file to main server using function from the script
+20. upload function will update request status
+
+
+
+
