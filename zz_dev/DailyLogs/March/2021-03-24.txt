@@ -1,0 +1,11 @@
+<== 24 Mar 2021 ==>
+
+gy-react-carbon
+-> private route
+-> react context instead of redux
+-> cleaner code for app.js
+-> loading component (blur and disable touch)
+-> Login UI
+-> Signup UI
+-> cleaner code for shell UI
+-> include consideration for logged in/out
