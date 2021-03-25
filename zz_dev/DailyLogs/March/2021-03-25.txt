@@ -1,0 +1,10 @@
+<== 25 Mar 2021 ==>
+
+gy-react-carbon
+-> change some project hierarchy
+-> re-learn React Context API
+-> fix infinite loop in re-rendering some components
+-> better handling react context for state management
+-> completed the dummy code for authorizing user after authentication
+-> some validation on user input
+-> custom made toast notification that can be used globally
