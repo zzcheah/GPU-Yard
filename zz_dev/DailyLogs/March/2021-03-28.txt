@@ -1,0 +1,11 @@
+<== 28 Mar 2021 ==>
+
+main server
+-> Set up Spring Security
+-> enable login through email and password
+-> (email is retrieved from db, password currently use fixed value for testing purpose)
+-> added new dependencies (JWT lib and JAXB lib)
+-> all api require authentication except for "/authenticate" endpoint for user login
+-> modified User model
+-> Added Rest Controller mainly for interacting with front end
+-> User mongo repository to interact with mongodb (User collection)

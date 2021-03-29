@@ -1,0 +1,6 @@
+<== 29 Mar 2021 ==>
+
+main server
+-> enabled cors for retrieving data from backend server to front end
+-> added user profile model to be returned in AuthenticationResponse
+
