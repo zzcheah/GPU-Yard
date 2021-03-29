@@ -4,3 +4,14 @@ main server
 -> enabled cors for retrieving data from backend server to front end
 -> added user profile model to be returned in AuthenticationResponse
 
+gy-react-carbon
+-> added new dependecies (axios, jwt-decode)
+-> added functionality to restore user session from local storage
+-> verify if the jwt is expired, remove if expired
+-> created service to handle auth related actions
+-> replaced mock api fetching with real backend endpoint
+-> replaced fetch with axios
+
+integration
+-> user login using front end
+-> backend return jwt
