@@ -1,0 +1,37 @@
+Presentation Slides:
+1.  Front page (DONE)
+
+2.  Description, Objective
+    - Re-present the system in a clearer way
+
+3.  Architecture diagram
+    - How the system works (flow)
+
+4.  Module Diagram
+    - Redefine modules
+    - categorize module based on the completion progress (different colors)
+
+5.  Conclusion
+    - completion progress (percentage)
+    - challenges
+        * security (jwt) - find out better implementation
+        * wsl insider built not stable as for now
+    - what to expect in the next presentation
+        * another MLaaS Logic
+        * front end using ReactJS
+        * launch main server and task worker at different machine
+
+Demo:
+1.  Whole flow without UI
+
+
+
+
+
+
+
+
+
+
+
+Demo:
