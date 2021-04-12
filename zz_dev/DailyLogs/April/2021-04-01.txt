@@ -2,5 +2,5 @@
 
 -> prepare prototype presentations
 -> prototype documents
--> disbale spring security for demo purpose
+-> disable spring security for demo purpose
 

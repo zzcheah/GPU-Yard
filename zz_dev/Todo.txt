@@ -3,19 +3,18 @@
 === === === === === === === === === === === === === === === === === === === === === === ===
 
 Main Server:
+Job Scheduling:
+-> remove eureka server
+-> change architecture to have task worker pool from main server instead
+
+Security:
 -> return only jwt with user profile as claim
 -> Rest Controller for React (request details, user details)
 
 React:
--> decode user profile from jwt
--> optimize loading from local storage in React Context
--> fetch data from backend and map to components
--> download button from download link (download output files)
+-> redesign whole front end
+-> add administrator use cases
 
-MLaaS Logic:
--> prebuild functions/scripts
-   3.   upload output zip
-   4.   call api to release machine along with remarks
 
 Integration testing:
 -> different machine testing (on cloud maybe)
@@ -36,3 +35,7 @@ Additional:
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
+MLaaS Logic:
+-> prebuild functions/scripts
+   3.   upload output zip
+   4.   call api to release machine along with remarks
