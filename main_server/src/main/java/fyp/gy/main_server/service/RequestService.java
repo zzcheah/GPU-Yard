@@ -114,12 +114,11 @@ public class RequestService {
 
     private void processRequest(String requestID) {
         try {
-
             machineService.allocateMachine(requestID);
             updateRequestStatus(requestID, "PROCESSING");
         } catch (Exception e) {
             updateRequestStatus(requestID, "FAILED_ALLOCATING_MACHINE");
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -148,7 +147,7 @@ public class RequestService {
 
         Query q = new Query(Criteria.where("requestID").is(requestID));
         DeleteResult d = template.remove(q, GyConstant.TASKS_COLLECTION);
-        if (d.getDeletedCount() != 0)
+        if (d.getDeletedCount() == 0)
             logger.warn(String.format("Task #%s was not removed from Tasks Collection", requestID));
         else
             logger.info(String.format("Task #%s was removed from Tasks Collection", requestID));
