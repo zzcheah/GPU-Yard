@@ -1,17 +1,17 @@
 Presentation Slides:
 1.  Front page (DONE)
 
-2.  Description, Objective
+2.  Description, Objective (Done)
     - Re-present the system in a clearer way
 
-3.  Architecture diagram
+3.  Architecture diagram (Done)
     - How the system works (flow)
 
-4.  Module Diagram
+4.  Module Diagram (DONE)
     - Redefine modules
     - categorize module based on the completion progress (different colors)
 
-5.  Conclusion
+5.  Conclusion (DONE)
     - completion progress (percentage)
     - challenges
         * security (jwt) - find out better implementation

@@ -1,0 +1,33 @@
+
+In this demo, I will be presenting the flow from submitting request to how the output is generated.
+Please note that the front end of this system is still under development, so everything in this demo will be about the backend of the system.
+
+Before this, I would like to explain some of the software or tools that I will be using later.
+
+1. Postman
+Since I do not have a UI for this demo, I will be using postman to send API calls to the backend server to represent how a user submit a request
+
+2. Docker Desktop
+Docker Desktop is a GUI for docker engine, we will be using it to see a container status, access to the container in command line.
+
+3. Robo 3T
+A GUI to interact with mongoDB
+
+****************************************************************
+
+Currently, i have started 3 different servers, which are:
+1. The main server
+2. A task worker or the remote worker
+3. Eureka server
+
+The main server and the task worker are meant to be hosted on different machine.
+However, for this demo, the servers will be hosted on the same machine.
+
+The main server is the master while the task worker is the slave.
+Main Server will receive input from the user and assign it to the task worker to process the request.
+
+Now I will use Postman to submit a request.
+
+
+
+

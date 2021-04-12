@@ -1,0 +1,25 @@
+MongoDB
+
+sudo systemctl start mongod
+sudo systemctl daemon-reload
+sudo systemctl status mongod
+sudo systemctl enable mongod
+sudo systemctl stop mongod
+sudo systemctl restart mongod
+mongo
+
+
+sudo service mongod stop
+sudo nano /etc/mongod.conf
+
+
+cd /tmp; ls -l *.sock
+sudo chown mongod:mongod mongodb-27017.sock
+
+
+Eureka
+cd ~/GPU-Yard
+nohup java -jar eureka-0.0.1-SNAPSHOT.jar &
+nohup java -jar main_server-0.0.1-SNAPSHOT.jar
+
+ps -ef | grep java
