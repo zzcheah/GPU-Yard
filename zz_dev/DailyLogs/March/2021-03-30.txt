@@ -1,0 +1,6 @@
+<== 30 Mar 2021 ==>
+
+-> remove application properties redundancy
+-> disable mongo autoconfig in eureka server
+-> convert common module to be a library jar instead
+-> minor changes
