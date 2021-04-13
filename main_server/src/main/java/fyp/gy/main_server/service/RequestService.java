@@ -16,49 +16,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.PriorityQueue;
 
 @Service
 public class RequestService {
 
     Logger logger = LoggerFactory.getLogger(RequestService.class);
 
-    // Autowired
     private final MongoTemplate template;
-    private final MachineService machineService;
+    public final PriorityQueue<Task> jobQueue = new PriorityQueue<>();
 
-    // use internally
-    private final PriorityBlockingQueue<Task> jobQueue = new PriorityBlockingQueue<>();
-
-
-    Thread pollingThread = new Thread(() -> {
-        while (true) {
-            logger.info("Checking for job in queue...");
-            try {
-                Task task = jobQueue.take();
-                try {
-                    logger.info(String.format("Request #%s polled, looking for machine available...", task.getRequestID()));
-                    processRequest(task.getRequestID());
-                } catch (Exception e) {
-                    jobQueue.add(task);
-                    e.printStackTrace();
-                }
-            } catch (InterruptedException e) {
-                logger.error("fail polling request (QueueService): " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    });
-
-    public RequestService(MongoTemplate template, MachineService machineService) {
+    public RequestService(MongoTemplate template) {
         this.template = template;
-        this.machineService = machineService;
-
-        // restore queue from mongoDB
         restoreQueue();
-        pollingThread.start();
     }
 
+    // Correspond to Controller
     public String addRequest(Map<String, Object> payload) {
 
         Request detail = new Request();
@@ -86,48 +59,63 @@ public class RequestService {
         return detail.getId();
     }
 
-    public void completeRequest(String requestID, String machineID, String remark) {
+    public void completeRequest(String requestID, String remark) {
 
-        if (requestID != null && !requestID.isEmpty()) {
+        try {
+            Update update = new Update();
+            update.set("status", "COMPLETED");
+            update.set("remark", remark);
 
-            Query q = new Query(Criteria.where("_id").is(new ObjectId(requestID)));
-            Update u = new Update();
-            u.set("status", "COMPLETED");
-            u.set("remark", remark);
-
-            UpdateResult r = template.updateFirst(q, u, GyConstant.REQUESTS_COLLECTION);
-            logger.info(String.format("Updating Request #%s", requestID));
+            updateRequest(requestID,update);
 
             clearTask(requestID);
             logger.info(String.format("Request #%s completed.", requestID));
 
             // notify user;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        machineService.releaseMachine(machineID);
+    public Request getJob(String workerID) {
 
+        try {
+            logger.info(String.format("Worker #%s pooling job queue", workerID));
+            Task task = jobQueue.poll();
+            if(task==null) return null;
+
+            String requestID = task.getRequestID();
+            Request request = template.findById(new ObjectId(requestID),Request.class, GyConstant.REQUESTS_COLLECTION);
+
+            // TODO: better handle missing request
+            if(request == null) {
+                logger.warn(String.format("Cannot locate request #%s in db", requestID));
+                return null;
+            }
+
+            logger.info(String.format("Request #%s is assigned to Worker #%s",requestID,workerID));
+            updateRequest(requestID,new Update().set("status", "PROCESSING"));
+            return request;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
     }
 
 
     // util func
 
-    private void processRequest(String requestID) {
-        try {
-            machineService.allocateMachine(requestID);
-            updateRequestStatus(requestID, "PROCESSING");
-        } catch (Exception e) {
-            updateRequestStatus(requestID, "FAILED_ALLOCATING_MACHINE");
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void updateRequestStatus(String requestID, String status) {
+    private void updateRequest(String requestID, Update u) {
 
         Query q = new Query(Criteria.where("_id").is(new ObjectId(requestID)));
-        Update u = new Update().set("status", status);
         UpdateResult result = template.updateFirst(q, u, GyConstant.REQUESTS_COLLECTION);
-        logger.info(String.format("Updated Request #%s Status to %s", requestID, status));
+        String note = u.toString();
+        if(result.getModifiedCount()==1) {
+            logger.info(String.format("Updated Request #%s :: %s", requestID, note));
+        } else {
+            logger.warn(String.format("Request #%s is not updated :: %s",requestID, note));
+        }
 
     }
 
@@ -153,4 +141,6 @@ public class RequestService {
             logger.info(String.format("Task #%s was removed from Tasks Collection", requestID));
 
     }
+
+
 }

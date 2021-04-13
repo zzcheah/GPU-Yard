@@ -1,19 +1,16 @@
 package fyp.gy.task_worker.service;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.HostConfig;
-import com.netflix.appinfo.InstanceInfo;
-import com.netflix.discovery.EurekaClient;
-import fyp.gy.common.constant.GyConstant;
 import fyp.gy.common.model.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Service
 public class TaskService {
@@ -21,40 +18,50 @@ public class TaskService {
     Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     // Autowired
-    private final DockerClient dockerClient;
-    private final EurekaClient eurekaClient;
-    private final HostConfig hostConfig;
-    private final MongoTemplate template;
+    private final DockerService docker;
+    private final RestTemplate restTemplate;
 
     // internal use
-    private InstanceInfo mainServer;
-    private String downloadPrefix;
-    private String uploadURL;
-    private String msURL;
+    private final String pollURL;
 
-    public TaskService(
-            MongoTemplate template,
-            DockerClient dockerClient,
-            @Qualifier("eurekaClient") EurekaClient eurekaClient) {
+//    private Thread pollingThread = new Thread(() -> {
+//        while (true) {
+//            logger.info("Checking for job in queue...");
+//            try {
+//                Task task = jobQueue.take();
+//                try {
+//                    logger.info(String.format("Request #%s polled, looking for machine available...", task.getRequestID()));
+//                    processRequest(task.getRequestID());
+//                } catch (Exception e) {
+//                    jobQueue.add(task);
+//                    e.printStackTrace();
+//                }
+//            } catch (InterruptedException e) {
+//                logger.error("fail polling request (QueueService): " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        }
+//    });
 
-        this.template = template;
-        this.dockerClient = dockerClient;
-        this.eurekaClient = eurekaClient;
+    @Autowired
+    public TaskService(DockerService docker,
+                       @Value("${mainserver.hostname}") String hn,
+                       @Value("${mainserver.port}") String port,
+                       @Value("${spring.application.name}") String workerID
+    ) {
 
-        dockerClient.pingCmd();
-        hostConfig = new HostConfig()
-                .withRuntime("nvidia")
-                .withNetworkMode("host");
+        this.docker = docker;
+        this.restTemplate = new RestTemplate();
 
-        try {
-            retrieveMainServer();
-            RestTemplate restTemplate = new RestTemplate();
-            String url = msURL.concat("request/complete?machineID=CRAZY_FROG&requestID=");
-            restTemplate.postForObject(url,null,Void.class);
+        String msURL = String.format("http://%s:%s", hn, port);
+        this.pollURL = msURL + "/request/poll?workerID=" + workerID;
 
-        } catch (Exception e) {
-            logger.warn(e.getMessage());
-        }
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                pollAndRun();
+            }
+        }, 10000, 10000);
 
         //<editor-fold desc="Manually run a docker on startup">
 //        logger.info(String.format("MainServer : %s:%s", ip_addr, port));
@@ -78,61 +85,20 @@ public class TaskService {
 //            e.printStackTrace();
 //        }
         //</editor-fold>
-
     }
 
-    public void process(String id) throws Exception {
+    private void pollAndRun() {
 
-        retrieveMainServer();
-        logger.info("Processing request #"+id);
-
-        Request req = template.findById(id, Request.class, GyConstant.REQUESTS_COLLECTION);
-        if (req == null) throw new IOException(String.format("Cannot locate request #%s in db", id));
-
-        String downloadURL = downloadPrefix + req.getInputFiles().get(0);
-        String encodedJson = req.getEncodedParam();
-
-//        System.out.println(downloadURL);
-//        System.out.println(uploadURL);
-        logger.info(req.getImage());
-
-        String containerID = dockerClient.createContainerCmd(req.getImage())
-                .withHostConfig(hostConfig)
-                .withStdinOpen(true)
-                .withEnv(
-                        String.format("inputParam=%s", encodedJson),
-                        String.format("downloadURL=%s", downloadURL),
-                        String.format("uploadURL=%s", uploadURL)
-                ).exec().getId();
-
-        dockerClient.startContainerCmd(containerID).exec();
-        logger.info(String.format("Container #%s is processing request #%s",containerID,id));
-
-//        dockerClient.copyArchiveToContainerCmd(containerID)
-//                .withHostResource("")
-//                .exec();
-
-
-    }
-
-    private void retrieveMainServer() throws Exception {
-
-        if(mainServer!=null) return;
-
+        logger.info("Polling job from main server");
         try {
-            this.mainServer = eurekaClient.getApplication("MAIN_SERVER").getInstances().get(0);
-            String ip_addr = mainServer.getIPAddr();
-            int port = mainServer.getPort();
-            this.downloadPrefix = String.format("http://%s:%d/files/", ip_addr, port);
-            this.uploadURL = String.format("http://%s:%d/files/add", ip_addr, port);
-            this.msURL = String.format("http://%s:%d", ip_addr, port);
-
-        } catch (Exception e) {
-            mainServer = null;
-            throw new Exception("Unable to locate MainServer");
+            Request request = restTemplate.getForObject(pollURL,Request.class);
+            if(request!=null) docker.process(request);
+        } catch (RestClientException e) {
+//            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-
     }
+
 
 }
 
