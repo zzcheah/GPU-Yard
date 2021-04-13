@@ -1,0 +1,6 @@
+<== 13 April 2021 ==>
+
+-> prevent the task worker from accessing mongodb directly
+-> minor changes
+-> remove code redundancy and improve consistency
+-> receive a Request instead of just the string

@@ -1,0 +1,6 @@
+<== 12 April 2021 ==>
+
+-> remove eureka
+-> remove unnecessary services
+-> changes in pom.xml
+-> optimize code in TaskService.java and DockerService.java
