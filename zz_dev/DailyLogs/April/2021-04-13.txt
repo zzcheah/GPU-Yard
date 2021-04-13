@@ -4,3 +4,7 @@
 -> minor changes
 -> remove code redundancy and improve consistency
 -> receive a Request instead of just the string
+-> checking for local images
+-> enable pulling image from docker hub
+-> redefine image enrty point
+-> fixed working directory for image
