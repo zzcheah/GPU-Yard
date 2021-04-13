@@ -2,8 +2,10 @@ package fyp.gy.task_worker.service;
 
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.DeviceRequest;
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
@@ -16,7 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.Objects;
+
+import java.util.*;
 
 @Service
 public class DockerService {
@@ -32,6 +35,8 @@ public class DockerService {
 
     private final String downloadPrefix;
     private final String uploadURL;
+
+    private final List<String> imageList = new ArrayList<>();
 
 
     @Autowired
@@ -56,17 +61,18 @@ public class DockerService {
         dockerClient.pingCmd();
 
         hostConfig = new HostConfig()
-//                .withRuntime("nvidia")
+                .withNetworkMode("host")
                 .withDeviceRequests(
                         ImmutableList.of(
                                 new DeviceRequest().withCapabilities(ImmutableList.of(ImmutableList.of("gpu")))
-                        ))
-                .withNetworkMode("host");
+                        ));
+
 
         String msURL = String.format("http://%s:%s", hn, port);
         this.downloadPrefix = msURL + "/files/";
         this.uploadURL = msURL + "/files/add";
 
+        retrieveImages();
     }
 
     public void process(Request req) {
@@ -81,9 +87,20 @@ public class DockerService {
 //        System.out.println(uploadURL);
         logger.info(req.getImage());
 
+        if(!imageList.contains(req.getImage())) {
+            try {
+                logger.info("Image not found, pulling from docker hub");
+                pullImage(req.getImage());
+                logger.info("Successfully pulled image!");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         String containerID = dockerClient.createContainerCmd(req.getImage())
                 .withHostConfig(hostConfig)
                 .withStdinOpen(true)
+                .withEntrypoint("python", "/gy/gyrun.py")
                 .withEnv(
                         String.format("inputParam=%s", encodedJson),
                         String.format("downloadURL=%s", downloadURL),
@@ -100,27 +117,31 @@ public class DockerService {
 
     }
 
+    private void pullImage(String imageWithTag) throws InterruptedException {
+
+        String[] temp = imageWithTag.split(":");
+        String image = temp[0];
+        String tag = temp[1];
+
+        dockerClient.pullImageCmd(image)
+                .withTag(tag)
+                .exec(new PullImageResultCallback())
+                .awaitCompletion();
+
+        imageList.add(imageWithTag);
+    }
+
+    private void retrieveImages() {
+        List<Image> images = dockerClient.listImagesCmd().exec();
+
+        for (Image image : images) {
+            imageList.addAll(Arrays.asList(image.getRepoTags()));
+        }
+    }
+
 
     //<editor-fold desc="ancient code">
-    //    private void pullImage(String image, String tag) throws InterruptedException {
-//
-//        String imageWithTag = image + ":" + tag;
-//
-//        final List<Image> images = dockerClient
-//                .listImagesCmd()
-//                .withImageNameFilter(imageWithTag).exec();
-//
-//        if (images.isEmpty()) {
-//            logger.info("Pulling Image: " + imageWithTag);
-//            dockerClient.pullImageCmd(image)
-//                    .withTag(tag)
-//                    .exec(new PullImageResultCallback())
-//                    .awaitCompletion();
-//            logger.info("Pulled image: " + imageWithTag);
-//        }
-//
-//
-//    }
+
 //
 //    private String runContainerWithImage(String imageWithTag) throws Exception {
 //        String id = dockerClient.createContainerCmd(imageWithTag)
