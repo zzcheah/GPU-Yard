@@ -1,0 +1,6 @@
+<== 14 April 2021 ==>
+
+-> added HTTP request filter to keep user login through jwt
+-> re-enable spring security
+-> tested calls from different user
+-> able to identify which user made the call

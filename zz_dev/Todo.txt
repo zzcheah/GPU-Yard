@@ -3,12 +3,11 @@
 === === === === === === === === === === === === === === === === === === === === === === ===
 
 Main Server:
-Job Scheduling:
--> remove eureka server
--> change architecture to have task worker pool from main server instead
+MainServer
+-> verify listed images before allowing the request
+
 
 Security:
--> return only jwt with user profile as claim
 -> Rest Controller for React (request details, user details)
 
 React:
@@ -27,15 +26,14 @@ Additional:
 -> notify user when finish processing
 
 
-*** Critical ***
--> error running container after windows update
+
 
 
 === === === === === === === === === === === === === === === === === === === === === === ===
                                       COMPLETED
 === === === === === === === === === === === === === === === === === === === === === === ===
 
-MLaaS Logic:
--> prebuild functions/scripts
-   3.   upload output zip
-   4.   call api to release machine along with remarks
+-> added HTTP request filter to keep user login through jwt
+-> re-enable spring security
+-> tested calls from different user
+-> able to identify which user made the call
