@@ -1,5 +1,6 @@
 package fyp.gy.main_server.config;
 
+import fyp.gy.main_server.filter.JwtRequestFilter;
 import fyp.gy.main_server.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,16 +8,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-//@EnableWebSecurity
+@EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final MyUserDetailsService myUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfigurer(MyUserDetailsService myUserDetailsService) {
+    public SecurityConfigurer(MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.myUserDetailsService = myUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Override
@@ -29,7 +34,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/request/poll").permitAll()
+                .antMatchers("/files/*").permitAll()
+                .anyRequest().authenticated()
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
