@@ -1,0 +1,17 @@
+<== 17 - 18 April 2021 ==>
+
+React material ui
+
+-> router setup
+-> react-redux setup
+-> redux-toolkit w/ redux thunk
+-> redux splice setup
+-> toast setup
+-> auth slice setup
+-> Components for Sign in sign up
+-> simple signin tested with main server
+-> added jwt-decode library
+-> tested PrivateRoute workable
+-> init auth store from jwt in local storage
+-> logout funcitonality added
+-> minor changes
