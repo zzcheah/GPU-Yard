@@ -1,0 +1,13 @@
+<== 19 April 2021 ==>
+
+React material ui
+-> apollo graphql client set up
+-> testing with jwt token
+-> minor changes
+
+MainServer
+-> set up graphQL
+-> tested working fine
+-> work together with REST Api
+-> enabled cors for both api and graphql
+-> temporary disable jwt authorization
