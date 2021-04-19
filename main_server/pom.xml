@@ -49,6 +49,16 @@
 			<version>2.3.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-spring-boot-starter</artifactId>
+			<version>5.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java-tools</artifactId>
+			<version>5.2.4</version>
+		</dependency>
+		<dependency>
 			<groupId>fyp.gy</groupId>
 			<artifactId>common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

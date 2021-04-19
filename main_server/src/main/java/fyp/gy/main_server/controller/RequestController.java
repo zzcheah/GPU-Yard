@@ -19,11 +19,8 @@ public class RequestController {
         this.requestService = requestService;
     }
 
-
-    // From react frontend
-    // TODO: change to reactController
     @PostMapping("/request/add")
-    public String addRequest(@RequestBody Map<String, Object> payload) {
+    public Request addRequest(@RequestBody Map<String, Object> payload) {
         try {
             return requestService.addRequest(payload);
         } catch (Exception e) {

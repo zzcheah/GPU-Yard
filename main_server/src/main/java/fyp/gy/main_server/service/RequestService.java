@@ -32,7 +32,7 @@ public class RequestService {
     }
 
     // Correspond to Controller
-    public String addRequest(Map<String, Object> payload) {
+    public Request addRequest(Map<String, Object> payload) {
 
         Request detail = new Request();
         detail.setStatus("NEW");
@@ -56,7 +56,7 @@ public class RequestService {
         // Volatile job queue
         jobQueue.add(task);
         logger.info("Added request #" + detail.getId() + " to job queue");
-        return detail.getId();
+        return detail;
     }
 
     public void completeRequest(String requestID, String remark) {

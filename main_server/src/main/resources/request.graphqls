@@ -1,0 +1,22 @@
+type Request {
+    id: String!
+    status: String!
+    createdAt: String!
+    title: String!
+    image: String!
+    user: User!
+    encodedParam: String!
+    inputFiles: [String]
+    outputFiles: [String]
+}
+
+# Root
+type Query {
+#    findAllAuthors: [Request]!
+    countRequests: Int!
+}
+
+# Root
+type Mutation {
+    createRequest(payload:String!): Request!
+}

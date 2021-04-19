@@ -1,0 +1,15 @@
+type User {
+    id: String!
+    name: String!
+    email: String!
+    phone: String
+}
+
+# Root
+#extend type Query {
+#
+#}
+
+# Root
+#extend type Mutation {
+#}
