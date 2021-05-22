@@ -18,7 +18,7 @@ public class MyUserDetails implements UserDetails {
 
     public MyUserDetails(User user) {
         this.user = user;
-        profile = new UserProfile(user.getId(),user.getEmail(),user.getName(),user.getPhone());
+        profile = new UserProfile(user.getId(),user.getEmail(),user.getName(),user.getPhone(),user.getRole());
     }
 
     @Override
