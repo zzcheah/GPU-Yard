@@ -11,9 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TaskService {
+
 
     Logger logger = LoggerFactory.getLogger(TaskService.class);
 
@@ -21,8 +23,11 @@ public class TaskService {
     private final DockerService docker;
     private final RestTemplate restTemplate;
 
+
     // internal use
     private final String pollURL;
+    private Timer timer;
+    private long poolingInterval;
 
 //    private Thread pollingThread = new Thread(() -> {
 //        while (true) {
@@ -54,14 +59,9 @@ public class TaskService {
         this.restTemplate = new RestTemplate();
 
         String msURL = String.format("http://%s:%s", hn, port);
-        this.pollURL = msURL + "/request/poll?workerID=" + workerID;
+        this.pollURL = msURL + "/request/poll?worker=" + workerID;
 
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                pollAndRun();
-            }
-        }, 10000, 10000);
+        resetTimer();
 
         //<editor-fold desc="Manually run a docker on startup">
 //        logger.info(String.format("MainServer : %s:%s", ip_addr, port));
@@ -92,26 +92,44 @@ public class TaskService {
         logger.info("Polling job from main server");
         try {
             Request request = restTemplate.getForObject(pollURL,Request.class);
-            if(request!=null) docker.process(request);
+            if(request!=null) {
+                resetTimer();
+                docker.process(request);
+            }
+            else increasePoolingInterval();
         } catch (RestClientException e) {
 //            e.printStackTrace();
+            increasePoolingInterval();
             logger.error(e.getMessage());
         }
+    }
+
+    private void resetTimer() {
+        if (timer!=null) timer.cancel();
+        timer = new Timer();
+        poolingInterval = TimeUnit.SECONDS.toMillis(10);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                pollAndRun();
+            }
+        }, poolingInterval, poolingInterval);
+    }
+
+    private void increasePoolingInterval() {
+        timer.cancel();
+        timer = new Timer();
+        poolingInterval = (long) Math.min(TimeUnit.MINUTES.toMillis(5),poolingInterval*1.5);
+        System.out.println(TimeUnit.MILLISECONDS.toSeconds(poolingInterval));
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                pollAndRun();
+            }
+        }, poolingInterval, poolingInterval);
     }
 
 
 }
 
-//<editor-fold desc="ancient code">
-//        String containerID = dockerClient.createContainerCmd("zz:proto2")
-//                .withHostConfig(hostConfig)
-//                .withEnv(
-//                        String.format("inputParam=%s", inputParam),
-//                        String.format("downloadURL=%s", downloadURL),
-//                        String.format("uploadURL=%s", uploadURL))
-////                .withCmd("bash")
-////                .withStdinOpen(true)
-//                .exec().getId();
-//
-//        dockerClient.startContainerCmd(containerID).exec();
-//</editor-fold>
