@@ -32,9 +32,9 @@ public class RequestController {
 
     // From task workers
     @GetMapping("/request/poll")
-    public ResponseEntity<Request> getJob(@RequestParam String workerID) {
+    public ResponseEntity<Request> getJob(@RequestParam String worker) {
         try {
-            Request request = requestService.getJob(workerID);
+            Request request = requestService.getJob(worker);
             return ResponseEntity.ok(request);
         } catch (Exception e) {
             throw new ResponseStatusException(
