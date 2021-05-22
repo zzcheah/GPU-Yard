@@ -1,0 +1,5 @@
+input AddNewImageInput {
+    image: String!,
+    tag: String!,
+    description: String!
+}

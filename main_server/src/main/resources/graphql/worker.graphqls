@@ -1,0 +1,19 @@
+type Worker {
+    id: String!
+    name: String!
+    maxTasks: Int!
+    ipAddress: String!
+    lastActive: Date
+    status: String
+    runningTasks: [String]!
+}
+
+
+extend type Query {
+    workerList: [Worker]!
+}
+
+# Root
+extend type Mutation {
+    registerWorker(input: RegisterWorkerInput): Worker!
+}

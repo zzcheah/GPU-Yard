@@ -6,6 +6,7 @@ type Request {
     image: String!
     user: User!
     encodedParam: String!
+    assignedTo: String
     inputFiles: [String]
     outputFiles: [String]
 }
@@ -14,6 +15,8 @@ type Request {
 type Query {
 #    findAllAuthors: [Request]!
     countRequests: Int!
+    myRequests: [Request]!
+    allRequests: [Request]!
 }
 
 # Root

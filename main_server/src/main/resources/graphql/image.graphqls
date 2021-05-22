@@ -1,0 +1,24 @@
+type DockerImage {
+    id: String!
+    name: String!
+    tags: [ImageTag]!
+    usageCount: String!
+    description: String
+}
+
+type ImageTag {
+    id: String!
+    image: String!
+    tag: String!
+    description: String!
+}
+
+
+extend type Query {
+    dockerImages: [DockerImage]!
+}
+
+# Root
+extend type Mutation {
+    addNewImage(input: AddNewImageInput): ImageTag!
+}

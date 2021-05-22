@@ -3,12 +3,12 @@ type User {
     name: String!
     email: String!
     phone: String
+    role: String
 }
 
-# Root
-#extend type Query {
-#
-#}
+extend type Query {
+    allUsers: [User]!
+}
 
 # Root
 #extend type Mutation {
