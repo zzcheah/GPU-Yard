@@ -1,0 +1,70 @@
+<== 20/4 - 22/5 2021 ==>
+
+Research
+-> study on Project Lombok (writing Java more efficiently)
+-> study on AWS (planning to move the main server to cloud)
+-> study on GraphQL
+-> study on Apollo GraphQL client
+
+React material ui
+-> find related illustrations in SVG format to beautify the front end
+-> Component to show task worker detail
+-> added reuseable scroll bar for the web app
+-> consistancy for backend host name
+-> Reusable Custom Card
+-> GraphQL mutations
+-> GraphQL queries
+-> fix little bugs
+-> minor changes
+
+** Dashboard components **
+-> Docker image request
+-> Top docker images
+-> Total Issues (fake stat)
+-> Total Requests
+-> Total users
+-> Welcome Back card
+-> Clickable Worker Status
+
+** More Layout Component **
+-> Add Image Dialog
+-> Add Worker Dialog
+-> SpeedDial
+-> Dashboard
+
+
+
+MainServer
+-> Health Checking Mechanism
+-> better isolation between services
+-> improve consistency in db (proper updates)
+-> worker validation
+-> in memory worker map to reduce read/write to db
+-> Added Lombok dependency
+-> more Constants
+-> reduce boilerplate code using lombok
+-> added new data models
+-> modify some data models
+-> added Role to User
+-> Temporary allow all Cors
+-> Added 4 MongoRepositories with necessary functions
+-> Temporary set JWT expiry to 500 hours
+-> minor changes
+
+Task Worker
+-> better job polling mechanism (increasing interval)
+-> polling used as health checking mechanism
+
+MainServer.graphQL (JAVA)
+-> input classes
+-> Mutation Services
+-> Query Services
+-> Complex Type Resolvers
+-> Scalar Type Definition
+
+.graphqls
+-> GraphQL input bank
+-> GraphQL scalar definitions
+-> GraphQL type definitions
+-> GraphQL Query definitions
+-> GraphQL Mutations definitions
