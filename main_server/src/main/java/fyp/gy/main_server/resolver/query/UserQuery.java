@@ -1,9 +1,9 @@
 package fyp.gy.main_server.resolver.query;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import fyp.gy.common.model.Request;
+import fyp.gy.main_server.model.User;
 import fyp.gy.main_server.model.auth.MyUserDetails;
-import fyp.gy.main_server.repository.RequestRepository;
+import fyp.gy.main_server.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -11,25 +11,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RequestQuery implements GraphQLQueryResolver {
+public class UserQuery implements GraphQLQueryResolver {
 
-    private final RequestRepository repo;
+    private final UserRepository repo;
 
-    public RequestQuery(RequestRepository repo) {
+    public UserQuery(UserRepository repo) {
         this.repo = repo;
     }
 
-    public int countRequests() {
-        return Math.toIntExact(repo.count());
-    }
-
-    public List<Request> getMyRequests() {
-        String id = userDetails().getProfile().getId();
-        System.out.println(id);
-        return repo.findByUserID(id);
-    }
-
-    public List<Request> getAllRequests() {
+    public List<User> getAllUsers() {
         return repo.findAll();
     }
 

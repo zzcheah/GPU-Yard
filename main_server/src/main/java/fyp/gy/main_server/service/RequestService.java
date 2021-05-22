@@ -5,6 +5,7 @@ import com.mongodb.client.result.UpdateResult;
 import fyp.gy.common.constant.GyConstant;
 import fyp.gy.common.model.Request;
 import fyp.gy.main_server.model.Task;
+import fyp.gy.main_server.repository.WorkerRepository;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +25,14 @@ public class RequestService {
     Logger logger = LoggerFactory.getLogger(RequestService.class);
 
     private final MongoTemplate template;
+    private final WorkerRepository workerRepo;
+    private final WorkerService workerService;
     public final PriorityQueue<Task> jobQueue = new PriorityQueue<>();
 
-    public RequestService(MongoTemplate template) {
+    public RequestService(MongoTemplate template, WorkerRepository workerRepo, WorkerService workerService) {
         this.template = template;
+        this.workerRepo = workerRepo;
+        this.workerService = workerService;
         restoreQueue();
     }
 
@@ -66,7 +71,7 @@ public class RequestService {
             update.set("status", "COMPLETED");
             update.set("remark", remark);
 
-            updateRequest(requestID,update);
+            updateRequest(requestID, update);
 
             clearTask(requestID);
             logger.info(String.format("Request #%s completed.", requestID));
@@ -77,24 +82,30 @@ public class RequestService {
         }
     }
 
-    public Request getJob(String workerID) {
+    public Request getJob(String workerName) {
 
         try {
-            logger.info(String.format("Worker #%s pooling job queue", workerID));
+
+            if (!workerService.allowPolling(workerName)) return null;
+
+            logger.info(String.format("Worker #%s pooling job queue", workerName));
+
             Task task = jobQueue.poll();
-            if(task==null) return null;
+            if (task == null) return null;
 
             String requestID = task.getRequestID();
-            Request request = template.findById(new ObjectId(requestID),Request.class, GyConstant.REQUESTS_COLLECTION);
+            Request request = template.findById(new ObjectId(requestID), Request.class, GyConstant.REQUESTS_COLLECTION);
 
             // TODO: better handle missing request
-            if(request == null) {
+            if (request == null) {
                 logger.warn(String.format("Cannot locate request #%s in db", requestID));
                 return null;
             }
 
-            logger.info(String.format("Request #%s is assigned to Worker #%s",requestID,workerID));
-            updateRequest(requestID,new Update().set("status", "PROCESSING"));
+            workerService.addToWorkerTasks(workerName, requestID);
+
+            logger.info(String.format("Request #%s is assigned to Worker #%s", requestID, workerName));
+            updateRequest(requestID, new Update().set("status", "PROCESSING").set("assignedTo", workerName));
             return request;
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,10 +122,10 @@ public class RequestService {
         Query q = new Query(Criteria.where("_id").is(new ObjectId(requestID)));
         UpdateResult result = template.updateFirst(q, u, GyConstant.REQUESTS_COLLECTION);
         String note = u.toString();
-        if(result.getModifiedCount()==1) {
+        if (result.getModifiedCount() == 1) {
             logger.info(String.format("Updated Request #%s :: %s", requestID, note));
         } else {
-            logger.warn(String.format("Request #%s is not updated :: %s",requestID, note));
+            logger.warn(String.format("Request #%s is not updated :: %s", requestID, note));
         }
 
     }
@@ -141,6 +152,5 @@ public class RequestService {
             logger.info(String.format("Task #%s was removed from Tasks Collection", requestID));
 
     }
-
 
 }

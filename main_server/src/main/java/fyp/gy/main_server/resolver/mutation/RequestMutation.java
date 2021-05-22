@@ -14,7 +14,6 @@ import java.util.Base64;
 import java.util.Map;
 
 @Component
-@CrossOrigin(origins = "http://localhost:3000")
 public class RequestMutation implements GraphQLMutationResolver {
 
     private final RequestRepository requestRepo;

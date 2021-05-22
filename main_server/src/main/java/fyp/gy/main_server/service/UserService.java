@@ -16,7 +16,6 @@ public class UserService {
 
     public UserService(MongoTemplate template) {
         this.template = template;
-        logger.info("Starting User Service...");
     }
 
 
