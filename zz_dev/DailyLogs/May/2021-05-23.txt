@@ -1,0 +1,23 @@
+<== 23 May 2021 ==>
+
+React material ui
+-> added user detail route
+-> scroll bar style applies to table
+-> completed sign up compoenent and actions
+-> Toast message for mutation completion
+-> added clickable row function to reusable table
+-> added worker and user pages
+-> added individual worker and user pages
+-> added register user thunk
+-> minor changes
+
+Main Server
+-> standardize collection names
+-> added signup API endpoint
+-> added Encoder for password
+-> removed redundant code
+-> backend code for registering new user (with password encoder)
+-> modify fields in user model
+-> efficient code using project lombok
+-> new model for DTO
+-> graph ql definition changes
