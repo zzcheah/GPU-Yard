@@ -3,15 +3,15 @@ package fyp.gy.main_server.model.auth;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter
 @AllArgsConstructor
-public class UserProfile {
+public class RegistrationRequest {
 
-    private String id;
-    private String email;
     private String name;
-    private String phoneNumber;
-    private String role;
-    private String status;
+    private String email;
+    private String password;
+
+
 }

@@ -18,7 +18,7 @@ public class MyUserDetails implements UserDetails {
 
     public MyUserDetails(User user) {
         this.user = user;
-        profile = new UserProfile(user.getId(),user.getEmail(),user.getName(),user.getPhone(),user.getRole());
+        profile = new UserProfile(user.getId(),user.getEmail(),user.getName(),user.getPhone(),user.getRole(), user.getStatus());
     }
 
     @Override
@@ -28,7 +28,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "password";
+        return user.getPassword();
     }
 
     @Override

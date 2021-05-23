@@ -4,6 +4,7 @@ type User {
     email: String!
     phone: String
     role: String
+    status: String
 }
 
 extend type Query {
@@ -12,4 +13,5 @@ extend type Query {
 
 # Root
 #extend type Mutation {
+#    registerUser(input: RegisterUserInput): User!
 #}

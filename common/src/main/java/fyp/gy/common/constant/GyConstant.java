@@ -7,8 +7,8 @@ public class GyConstant {
     public final static String REQUESTS_COLLECTION = "Requests";
     public final static String USERS_COLLECTION = "Users";
     public final static String WORKERS_COLLECTION = "Workers";
-    public static final String DOCKER_IMAGE_COLLECTION = "DockerImage";
-    public static final String IMAGE_TAG_COLLECTION = "ImageTag";
+    public static final String DOCKER_IMAGE_COLLECTION = "DockerImages";
+    public static final String IMAGE_TAG_COLLECTION = "ImageTags";
 
 
     // Format
