@@ -1,10 +1,12 @@
 package fyp.gy.main_server.controller;
 
 import fyp.gy.common.model.Request;
+import fyp.gy.main_server.service.FileService;
 import fyp.gy.main_server.service.RequestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
@@ -14,9 +16,11 @@ import java.util.Map;
 public class RequestController {
 
     private final RequestService requestService;
+    private final FileService fileService;
 
-    public RequestController(RequestService requestService) {
+    public RequestController(RequestService requestService, FileService fileService) {
         this.requestService = requestService;
+        this.fileService = fileService;
     }
 
     @PostMapping("/request/add")
@@ -44,9 +48,14 @@ public class RequestController {
     }
 
     @PostMapping("/request/complete")
-    public void completeRequest(@RequestParam("requestID") String requestID) {
+    public void completeRequest(
+            @RequestParam("requestID") String requestID,
+            @RequestParam("status") String status,
+            @RequestParam("remark") String remark,
+            @RequestParam("file") MultipartFile file) {
         try {
-            requestService.completeRequest(requestID, "some remark");
+            String fileID = fileService.addFile(file);
+            requestService.completeRequest(requestID, status, remark, fileID);
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e

@@ -9,10 +9,11 @@ public class GyConstant {
     public final static String WORKERS_COLLECTION = "Workers";
     public static final String DOCKER_IMAGE_COLLECTION = "DockerImages";
     public static final String IMAGE_TAG_COLLECTION = "ImageTags";
-
+    public static final String NOTIFICATIONS_COLLECTION = "Notifications";
 
     // Format
     public final static String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
+
 
 
 }

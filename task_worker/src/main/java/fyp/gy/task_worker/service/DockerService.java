@@ -70,7 +70,7 @@ public class DockerService {
 
         String msURL = String.format("http://%s:%s", hn, port);
         this.downloadPrefix = msURL + "/files/";
-        this.uploadURL = msURL + "/files/add";
+        this.uploadURL = msURL + "/request/complete";
 
         retrieveImages();
     }

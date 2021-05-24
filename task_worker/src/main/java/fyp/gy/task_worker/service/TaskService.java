@@ -120,7 +120,7 @@ public class TaskService {
         timer.cancel();
         timer = new Timer();
         poolingInterval = (long) Math.min(TimeUnit.MINUTES.toMillis(5),poolingInterval*1.5);
-        System.out.println(TimeUnit.MILLISECONDS.toSeconds(poolingInterval));
+//        System.out.println(TimeUnit.MILLISECONDS.toSeconds(poolingInterval));
 
         timer.schedule(new TimerTask() {
             @Override

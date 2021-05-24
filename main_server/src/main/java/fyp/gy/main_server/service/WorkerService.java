@@ -1,11 +1,14 @@
 package fyp.gy.main_server.service;
 
+import com.mongodb.client.result.UpdateResult;
 import fyp.gy.common.constant.GyConstant;
+import fyp.gy.common.model.Notification;
 import fyp.gy.common.model.Request;
 import fyp.gy.main_server.model.User;
 import fyp.gy.main_server.model.Worker;
 import fyp.gy.main_server.repository.RequestRepository;
 import fyp.gy.main_server.repository.WorkerRepository;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -78,6 +81,10 @@ public class WorkerService {
         workerMap.get(workerName).getRunningTasks().add(requestID);
     }
 
+    public List<Worker> getWorkerList(){
+        return new ArrayList<>(workerMap.values());
+    }
+
     private void updateStates() {
 
         Date currentTime = new Date(System.currentTimeMillis());
@@ -101,6 +108,27 @@ public class WorkerService {
 
                 if (!request.getStatus().equals("PROCESSING")) {
                     worker.getRunningTasks().remove(i--);
+                } else if(worker.getStatus().equals("Inactive")){
+                    Query q = new Query(Criteria.where("_id").is(new ObjectId(requestID)));
+                    Update u = new Update();
+                    u.set("status","ERROR");
+                    u.set("remark", String.format("Worker %s shut down unexpectedly. Contact Admin for more info", worker.getName() ));
+                    UpdateResult result = template.updateFirst(q, u, GyConstant.REQUESTS_COLLECTION);
+                    String note = u.toString();
+                    if (result.getModifiedCount() == 1) {
+                        logger.info(String.format("Updated Request #%s :: %s", requestID, note));
+                        worker.getRunningTasks().remove(i--);
+                        Notification notification = Notification.builder()
+                                .content(String.format("Error processing your request # %s.",requestID))
+                                .isRead(false)
+                                .severity("error")
+                                .user(request.getUserID())
+                                .build();
+
+                        template.save(notification);
+                    } else {
+                        logger.warn(String.format("Request #%s is not updated :: %s", requestID, note));
+                    }
                 }
             }
 

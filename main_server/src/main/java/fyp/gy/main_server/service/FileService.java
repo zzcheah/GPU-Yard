@@ -31,13 +31,14 @@ public class FileService {
 
 
     public String addFile(MultipartFile file) throws IOException {
-        logger.info("Adding File...");
+
+        if(file==null) return null;
 
 //        DBObject metaData = new BasicDBObject();
 //        metaData.put("flow", "video");
 //        metaData.put("title", title);
 
-
+        logger.info("Adding File...");
         ObjectId id = gridFsTemplate.store(
                 file.getInputStream(), file.getOriginalFilename(), file.getContentType());
         return id.toString();

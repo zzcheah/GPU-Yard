@@ -3,9 +3,10 @@ package fyp.gy.main_server.service;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import fyp.gy.common.constant.GyConstant;
+import fyp.gy.common.model.Notification;
 import fyp.gy.common.model.Request;
 import fyp.gy.main_server.model.Task;
-import fyp.gy.main_server.repository.WorkerRepository;
+import fyp.gy.main_server.repository.RequestRepository;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +26,14 @@ public class RequestService {
     Logger logger = LoggerFactory.getLogger(RequestService.class);
 
     private final MongoTemplate template;
-    private final WorkerRepository workerRepo;
     private final WorkerService workerService;
+    private final RequestRepository requestRepo;
     public final PriorityQueue<Task> jobQueue = new PriorityQueue<>();
 
-    public RequestService(MongoTemplate template, WorkerRepository workerRepo, WorkerService workerService) {
+    public RequestService(MongoTemplate template, WorkerService workerService, RequestRepository requestRepo) {
         this.template = template;
-        this.workerRepo = workerRepo;
         this.workerService = workerService;
+        this.requestRepo = requestRepo;
         restoreQueue();
     }
 
@@ -64,19 +65,33 @@ public class RequestService {
         return detail;
     }
 
-    public void completeRequest(String requestID, String remark) {
+    public void completeRequest(String requestID, String status, String remark, String fileID) {
 
         try {
-            Update update = new Update();
-            update.set("status", "COMPLETED");
-            update.set("remark", remark);
 
-            updateRequest(requestID, update);
+            Request request = template.findById(new ObjectId(requestID),Request.class);
+            if(request==null) throw new NullPointerException("Missing Request # "+ requestID);
 
-            clearTask(requestID);
-            logger.info(String.format("Request #%s completed.", requestID));
+            request.setStatus(status);
+            request.setRemark(remark);
+            if(fileID!=null) {
+                request.getOutputFiles().add(fileID);
+            }
 
-            // notify user;
+            requestRepo.save(request);
+
+            logger.info(String.format("Request #%s updated, Status: %s.", requestID, status));
+
+            // notify user
+            Notification notification = Notification.builder()
+                    .content(String.format("Your request # %s has completed.",requestID))
+                    .isRead(false)
+                    .severity("info")
+                    .user(request.getUserID())
+                    .build();
+
+            template.save(notification);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,7 +111,6 @@ public class RequestService {
             String requestID = task.getRequestID();
             Request request = template.findById(new ObjectId(requestID), Request.class, GyConstant.REQUESTS_COLLECTION);
 
-            // TODO: better handle missing request
             if (request == null) {
                 logger.warn(String.format("Cannot locate request #%s in db", requestID));
                 return null;
@@ -106,6 +120,9 @@ public class RequestService {
 
             logger.info(String.format("Request #%s is assigned to Worker #%s", requestID, workerName));
             updateRequest(requestID, new Update().set("status", "PROCESSING").set("assignedTo", workerName));
+
+            clearTask(requestID);
+
             return request;
         } catch (Exception e) {
             e.printStackTrace();

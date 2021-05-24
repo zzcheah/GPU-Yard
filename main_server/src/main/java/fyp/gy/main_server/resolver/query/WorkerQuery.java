@@ -2,7 +2,7 @@ package fyp.gy.main_server.resolver.query;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import fyp.gy.main_server.model.Worker;
-import fyp.gy.main_server.repository.WorkerRepository;
+import fyp.gy.main_server.service.WorkerService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,15 +10,14 @@ import java.util.List;
 @Component
 public class WorkerQuery implements GraphQLQueryResolver {
 
-    private final WorkerRepository repo;
+    private final WorkerService workerService;
 
-    public WorkerQuery(WorkerRepository repo) {
-        this.repo = repo;
+    public WorkerQuery(WorkerService workerService) {
+        this.workerService = workerService;
     }
 
     public List<Worker> getWorkerList() {
-        System.out.println("HAHAHHAHAH");
-        return repo.findAll();
+        return workerService.getWorkerList();
     }
 
 }
