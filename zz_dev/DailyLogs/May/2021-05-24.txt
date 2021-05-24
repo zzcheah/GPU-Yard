@@ -1,0 +1,21 @@
+<== 24 May 2021 ==>
+
+React material ui
+-> optimize code for top images.
+-> fix minor logic error
+
+Main Server
+-> new collection ( Notification )
+-> lombok edit some model
+-> more constants
+-> temporary allow unauthorized complete request API call
+-> more parameters for completing a Request
+-> worker query now use in memory map
+-> add notification when request completed
+-> update request when reqeust completed
+-> update request status to error when worker down
+-> notify when worker down
+-> new upload url (with more parameter instead of just uploading file)
+-> minor changes
+
+
