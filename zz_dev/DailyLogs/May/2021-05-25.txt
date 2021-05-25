@@ -1,0 +1,10 @@
+<== 25 May 2021 ==>
+
+Main Server
+-> return string to complete request
+
+Task Worker
+-> add more necessary environment variables to the container
+
+Image logic
+-> list gpy, surround with try catch
