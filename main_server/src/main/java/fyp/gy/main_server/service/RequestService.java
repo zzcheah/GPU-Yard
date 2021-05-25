@@ -65,36 +65,30 @@ public class RequestService {
         return detail;
     }
 
-    public void completeRequest(String requestID, String status, String remark, String fileID) {
+    public String completeRequest(String requestID, String status, String remark, String fileID) {
+        Request request = template.findById(new ObjectId(requestID),Request.class);
+        if(request==null) throw new NullPointerException("Missing Request # "+ requestID);
 
-        try {
-
-            Request request = template.findById(new ObjectId(requestID),Request.class);
-            if(request==null) throw new NullPointerException("Missing Request # "+ requestID);
-
-            request.setStatus(status);
-            request.setRemark(remark);
-            if(fileID!=null) {
-                request.getOutputFiles().add(fileID);
-            }
-
-            requestRepo.save(request);
-
-            logger.info(String.format("Request #%s updated, Status: %s.", requestID, status));
-
-            // notify user
-            Notification notification = Notification.builder()
-                    .content(String.format("Your request # %s has completed.",requestID))
-                    .isRead(false)
-                    .severity("info")
-                    .user(request.getUserID())
-                    .build();
-
-            template.save(notification);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        request.setStatus(status);
+        request.setRemark(remark);
+        if(fileID!=null) {
+            request.getOutputFiles().add(fileID);
         }
+
+        requestRepo.save(request);
+
+        logger.info(String.format("Request #%s updated, Status: %s.", requestID, status));
+
+        // notify user
+        Notification notification = Notification.builder()
+                .content(String.format("Your request # %s has completed.",requestID))
+                .isRead(false)
+                .severity("info")
+                .user(request.getUserID())
+                .build();
+
+        template.save(notification);
+        return "Request completed.";
     }
 
     public Request getJob(String workerName) {

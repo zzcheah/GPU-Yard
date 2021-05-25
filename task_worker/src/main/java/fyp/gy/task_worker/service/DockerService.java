@@ -104,7 +104,8 @@ public class DockerService {
                 .withEnv(
                         String.format("inputParam=%s", encodedJson),
                         String.format("downloadURL=%s", downloadURL),
-                        String.format("uploadURL=%s", uploadURL)
+                        String.format("uploadURL=%s", uploadURL),
+                        String.format("requestID=%s", req.getId())
                 ).exec().getId();
 
         dockerClient.startContainerCmd(containerID).exec();

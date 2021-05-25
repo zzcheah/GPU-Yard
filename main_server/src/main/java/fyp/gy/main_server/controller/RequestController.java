@@ -48,14 +48,14 @@ public class RequestController {
     }
 
     @PostMapping("/request/complete")
-    public void completeRequest(
+    public String completeRequest(
             @RequestParam("requestID") String requestID,
             @RequestParam("status") String status,
             @RequestParam("remark") String remark,
             @RequestParam("file") MultipartFile file) {
         try {
             String fileID = fileService.addFile(file);
-            requestService.completeRequest(requestID, status, remark, fileID);
+            return requestService.completeRequest(requestID, status, remark, fileID);
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, e.getMessage(), e
