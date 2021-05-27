@@ -23,6 +23,7 @@ public class RequestController {
         this.fileService = fileService;
     }
 
+    // only for testing
     @PostMapping("/request/add")
     public Request addRequest(@RequestBody Map<String, Object> payload) {
         try {

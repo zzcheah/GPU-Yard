@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 public class DockerImageMutation implements GraphQLMutationResolver {
 
-        private final DockerImageRepository imageRepo;
+    private final DockerImageRepository imageRepo;
     private final ImageTagRepository tagRepo;
     private final MongoTemplate template;
 
@@ -35,11 +35,11 @@ public class DockerImageMutation implements GraphQLMutationResolver {
     public ImageTag addNewImage(AddNewImageInput input) {
 
         DockerImage image = imageRepo.findByName(input.getImage()).orElse(null);
-        if(image==null) {
+        if (image == null) {
             image = DockerImage.builder()
                     .name(input.getImage())
                     .tags(new ArrayList<>())
-                    .description("General description for image "+ input.getImage())
+                    .description("General description for image " + input.getImage())
                     .build();
             template.save(image);
             log.info("registered a new docker image");
@@ -59,12 +59,4 @@ public class DockerImageMutation implements GraphQLMutationResolver {
 
     }
 
-    private Map<String, Object> decodeJson(String encodedPayload) throws JsonProcessingException {
-
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedPayload);
-        String decodedString = new String(decodedBytes);
-
-        return new ObjectMapper().readValue(decodedString, new TypeReference<Map<String, Object>>() {
-        });
-    }
 }

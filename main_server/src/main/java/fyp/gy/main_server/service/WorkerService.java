@@ -17,8 +17,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static fyp.gy.common.constant.GyConstant.DATE_TIME_FORMAT;
 
 @Service
 public class WorkerService {
@@ -123,6 +126,7 @@ public class WorkerService {
                                 .isRead(false)
                                 .severity("error")
                                 .user(request.getUserID())
+                                .createdAt(new SimpleDateFormat(DATE_TIME_FORMAT, Locale.ENGLISH).format(currentTime))
                                 .build();
 
                         template.save(notification);
