@@ -2,7 +2,9 @@ package fyp.gy.common.model;
 
 
 import fyp.gy.common.constant.GyConstant;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,11 +12,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 @Getter @Setter
+@Builder
 @Document(collection = GyConstant.REQUESTS_COLLECTION)
 public class Request {
 
     @Id
     private String id;
+    private String name;
     private String status;
     private String userID;
     private String createdAt;

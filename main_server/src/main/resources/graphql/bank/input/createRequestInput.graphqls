@@ -1,0 +1,7 @@
+input CreateRequestInput {
+    name: String!,
+    image: String!,
+    param: String!,
+    inputFiles: [String]!
+}
+

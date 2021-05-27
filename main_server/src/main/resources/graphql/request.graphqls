@@ -1,5 +1,6 @@
 type Request {
     id: String!
+    name: String!
     status: String!
     createdAt: String!
     title: String!
@@ -13,7 +14,7 @@ type Request {
 
 # Root
 type Query {
-#    findAllAuthors: [Request]!
+    #    findAllAuthors: [Request]!
     countRequests: Int!
     myRequests: [Request]!
     allRequests: [Request]!
@@ -21,5 +22,5 @@ type Query {
 
 # Root
 type Mutation {
-    createRequest(payload:String!): Request!
+    createRequest(input: CreateRequestInput): Request!
 }

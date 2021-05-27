@@ -1,0 +1,19 @@
+type Notification {
+    id: String!
+    isRead: Boolean!
+    user: String!
+    content: String!
+    severity: String!
+    createdAt: String!
+    link: String
+}
+
+
+extend type Query {
+    notificationList: [Notification]!
+}
+
+# Root
+extend type Mutation {
+    setReadNotification(input: String): Notification
+}

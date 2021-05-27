@@ -19,6 +19,8 @@ public class Notification {
     private String user;
     private String content;
     private String severity = "info";
+    private String createdAt;
+    private String link;
 
 
 }
