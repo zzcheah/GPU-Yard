@@ -1,0 +1,25 @@
+<== 26,27 May 2021 ==>
+
+Front End
+-> Different UI for Admin and Users
+-> Removed notification page
+-> notification popover complete mechanism (new, old notifications)
+-> accurate notification badge count
+-> different speed dial actions for different role
+-> Add request full mechanism
+-> json input validator
+-> more mutation and query added
+-> IP address hidden from user
+-> minor changes
+
+
+Main Server
+-> added more field for some model
+-> more lombok refactoring
+-> more graphql mutations and query definitions
+-> java mutation and query backend logics
+-> models for graphql
+-> added notification for request complete or error
+-> optimize code (more consistency, reduced redundancy)
+-> added some util functions
+-> minor changes
