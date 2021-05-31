@@ -44,6 +44,12 @@
 			<artifactId>docker-java-transport-httpclient5</artifactId>
 			<version>3.2.7</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+			<scope>provided</scope>
+		</dependency>
         <dependency>
             <groupId>fyp.gy</groupId>
             <artifactId>common</artifactId>
