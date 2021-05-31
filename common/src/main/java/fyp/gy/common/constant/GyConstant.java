@@ -11,6 +11,9 @@ public class GyConstant {
     public static final String IMAGE_TAG_COLLECTION = "ImageTags";
     public static final String NOTIFICATIONS_COLLECTION = "Notifications";
 
+    // Preference node
+    public static final String PREFERENCE_NODE = "fyp/gy/worker";
+
     // Format
     public final static String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
 

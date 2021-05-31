@@ -37,6 +37,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/request/poll").permitAll()
                 .antMatchers("/request/complete").permitAll()
+                .antMatchers("/verify").permitAll()
                 .antMatchers("/files/*").permitAll()
 //                .antMatchers("/graphql").permitAll()
                 .anyRequest().authenticated()

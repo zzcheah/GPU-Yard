@@ -4,13 +4,11 @@ import com.mongodb.client.result.UpdateResult;
 import fyp.gy.common.constant.GyConstant;
 import fyp.gy.common.model.Notification;
 import fyp.gy.common.model.Request;
-import fyp.gy.main_server.model.User;
 import fyp.gy.main_server.model.Worker;
 import fyp.gy.main_server.repository.RequestRepository;
 import fyp.gy.main_server.repository.WorkerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,9 +22,8 @@ import java.util.concurrent.TimeUnit;
 import static fyp.gy.common.constant.GyConstant.DATE_TIME_FORMAT;
 
 @Service
+@Slf4j
 public class WorkerService {
-
-    Logger logger = LoggerFactory.getLogger(User.class);
 
     private final MongoTemplate template;
     private final WorkerRepository workerRepo;
@@ -43,7 +40,7 @@ public class WorkerService {
         List<Worker> workerList = template.findAll(Worker.class);
         for (Worker worker : workerList) {
             worker.setStatus("Checking");
-            workerMap.put(worker.getName(), worker);
+            workerMap.put(worker.getId(), worker);
         }
 
         new Timer().schedule(new TimerTask() {
@@ -54,19 +51,19 @@ public class WorkerService {
         }, DURATION, DURATION);
     }
 
-    public boolean allowPolling(String workerName) {
+    public boolean allowPolling(String workerId) {
 
-        Worker tmpWorker = workerRepo.findByName(workerName).orElse(null);
+        Worker tmpWorker = workerRepo.findById(workerId).orElse(null);
         if (tmpWorker == null) {
-            logger.error("Unrecognized Worker " + workerName + " attempted to poll request!!");
+            log.error("Unrecognized Worker #" + workerId + " attempted to poll request!!");
             return false;
         }
 
-        if(!workerMap.containsKey(workerName)) {
-            workerMap.put(workerName, tmpWorker);
+        if(!workerMap.containsKey(workerId)) {
+            workerMap.put(workerId, tmpWorker);
         }
 
-        Worker worker = workerMap.get(workerName);
+        Worker worker = workerMap.get(workerId);
 
         // update last active
         worker.setStatus("Active");
@@ -75,23 +72,28 @@ public class WorkerService {
         return worker.getRunningTasks().size() < worker.getMaxTasks();
     }
 
-    public void addToWorkerTasks(String workerName, String requestID) {
+    public void addToWorkerTasks(String workerId, String requestID) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("name").is(workerName));
+        query.addCriteria(Criteria.where("_id").is(new ObjectId(workerId)));
         Update update = new Update();
         update.addToSet("runningTasks", requestID);
         template.updateFirst(query, update, GyConstant.WORKERS_COLLECTION);
-        workerMap.get(workerName).getRunningTasks().add(requestID);
+        workerMap.get(workerId).getRunningTasks().add(requestID);
     }
 
     public List<Worker> getWorkerList(){
         return new ArrayList<>(workerMap.values());
     }
 
+    public Boolean verifyWorker(String id) {
+        Worker worker = workerRepo.findById(id).orElse(null);
+        return worker!=null;
+    }
+
     private void updateStates() {
 
         Date currentTime = new Date(System.currentTimeMillis());
-        workerMap.forEach((name, worker) -> {
+        workerMap.forEach((id, worker) -> {
 
             // calculate last seen, if more than 5 mins, set status to inactive
             if(worker.getLastActive()==null || currentTime.getTime()-worker.getLastActive().getTime()>DURATION) {
@@ -105,7 +107,7 @@ public class WorkerService {
                 Request request = requestRepo.findById(requestID).orElse(null);
 
                 if (request == null) {
-                    logger.error(String.format("RequestID #%s for Worker %s is missing", requestID, worker.getName()));
+                    log.error(String.format("RequestID #%s for Worker $%s is missing", requestID, worker.getId()));
                     continue;
                 }
 
@@ -115,11 +117,11 @@ public class WorkerService {
                     Query q = new Query(Criteria.where("_id").is(new ObjectId(requestID)));
                     Update u = new Update();
                     u.set("status","ERROR");
-                    u.set("remark", String.format("Worker %s shut down unexpectedly. Contact Admin for more info", worker.getName() ));
+                    u.set("remark", String.format("Worker #%s shut down unexpectedly. Contact Admin for more info", worker.getId() ));
                     UpdateResult result = template.updateFirst(q, u, GyConstant.REQUESTS_COLLECTION);
                     String note = u.toString();
                     if (result.getModifiedCount() == 1) {
-                        logger.info(String.format("Updated Request #%s :: %s", requestID, note));
+                        log.info(String.format("Updated Request #%s :: %s", requestID, note));
                         worker.getRunningTasks().remove(i--);
                         Notification notification = Notification.builder()
                                 .content(String.format("Error processing your request # %s.",requestID))
@@ -131,7 +133,7 @@ public class WorkerService {
 
                         template.save(notification);
                     } else {
-                        logger.warn(String.format("Request #%s is not updated :: %s", requestID, note));
+                        log.warn(String.format("Request #%s is not updated :: %s", requestID, note));
                     }
                 }
             }
