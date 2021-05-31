@@ -1,0 +1,16 @@
+<== 31 May 2021 ==>
+
+Main Server
+-> added constant for preference node
+-> fixed lombok no arg and builder conflict
+-> added new endpoint to verify a worker
+-> backend code for verifying worker
+-> uses Id for key instead of name for Worker map
+
+Task Worker
+-> added preference node
+-> added script to verify worker before start polling
+-> make use of preference to initialize server
+-> first timer will have to enter worker id
+-> redirect user to register the worker on web
+-> added lombok library
