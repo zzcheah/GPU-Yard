@@ -1,0 +1,18 @@
+type WorkerApplication {
+    id: String!
+    name: String!
+    maxTasks: Int!
+    ipAddress: String
+    email: String!
+    createdAt: String!
+}
+
+
+extend type Query {
+    workerApplications: [WorkerApplication]!
+}
+
+# Root
+#extend type Mutation {
+#    setReadNotification(input: String): Notification
+#}

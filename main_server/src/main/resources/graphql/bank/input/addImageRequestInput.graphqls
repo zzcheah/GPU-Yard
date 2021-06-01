@@ -1,0 +1,5 @@
+input AddImageRequestInput {
+    image: String!,
+    tag: String!,
+    remark: String
+}

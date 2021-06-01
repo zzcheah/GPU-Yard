@@ -1,12 +1,15 @@
 package fyp.gy.main_server.controller;
 
 
+import fyp.gy.common.model.WorkerApplication;
 import fyp.gy.main_server.model.User;
+import fyp.gy.main_server.model.api.WorkerApplicationInput;
 import fyp.gy.main_server.model.auth.AuthenticationRequest;
 import fyp.gy.main_server.model.auth.AuthenticationResponse;
 import fyp.gy.main_server.model.auth.MyUserDetails;
 import fyp.gy.main_server.model.auth.RegistrationRequest;
 import fyp.gy.main_server.repository.UserRepository;
+import fyp.gy.main_server.repository.WorkerApplicationRepository;
 import fyp.gy.main_server.service.MyUserDetailsService;
 import fyp.gy.main_server.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -19,22 +22,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static fyp.gy.main_server.util.DateTimeUtil.getCurrentTime;
+
 @RestController
 public class ReactController {
 
     private final AuthenticationManager authenticationManager;
     private final MyUserDetailsService myUserDetailsService;
     private final UserRepository userRepository;
+    private final WorkerApplicationRepository workerApplicationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     public ReactController(
             AuthenticationManager authenticationManager,
             MyUserDetailsService myUserDetailsService,
-            UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+            UserRepository userRepository, WorkerApplicationRepository workerApplicationRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.myUserDetailsService = myUserDetailsService;
         this.userRepository = userRepository;
+        this.workerApplicationRepository = workerApplicationRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
@@ -72,6 +79,24 @@ public class ReactController {
         userRepository.save(user);
 
         return ResponseEntity.ok("Success Registered User");
+
+    }
+
+    @PostMapping("/api/workerApplication")
+    public ResponseEntity<?> applyNewWorker(
+            @RequestBody WorkerApplicationInput input) {
+
+        workerApplicationRepository.save(
+                WorkerApplication.builder()
+                        .name(input.getName())
+                        .email(input.getEmail())
+                        .maxTasks(input.getMaxTasks())
+                        .ipAddress(input.getIpAddress())
+                        .createdAt(getCurrentTime())
+                        .build()
+        );
+
+        return ResponseEntity.ok("Successfully submitted the application");
 
     }
 }

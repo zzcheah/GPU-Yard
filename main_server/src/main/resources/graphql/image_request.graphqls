@@ -1,0 +1,17 @@
+type ImageRequest {
+    id: String!
+    image: String!
+    tag: String!
+    remark: String
+    createdAt: String!
+}
+
+
+extend type Query {
+    imageRequests: [ImageRequest]!
+}
+
+# Root
+extend type Mutation {
+    addImageRequest(input: AddImageRequestInput): ImageRequest!
+}
