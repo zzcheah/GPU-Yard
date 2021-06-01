@@ -1,0 +1,26 @@
+<== 1 June 2021 ==>
+
+React Front End
+-> added jsconfig.json for js checking and auto import
+-> new svgs
+-> new Route and form to register worker
+-> Docker Image Request renamed to Image request
+-> Image Request is now dynamic
+-> New worker application card on dashboard
+-> template component for rendering empty inbox
+-> mutation definition to add image
+-> query definitions to get worker applications and image requests
+-> modified dashboard layout
+-> redux thunk to submit worker application
+-> minor changes
+
+Main Server
+-> new Models for ImageRequest and WorkerApplication
+-> more Constants for db collections
+-> public endpoint for worker application
+-> endpoint backend and models
+-> repositories for new collections
+-> mutation logic for ImageRequest and WorkerApplication
+-> query logic for ImageRequest and WorkerApplication
+-> graphqls files
+-> graphql definitions (queries, mutations and input)
