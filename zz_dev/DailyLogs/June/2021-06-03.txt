@@ -1,0 +1,21 @@
+<== 3 June 2021 ==>
+
+React Front End
+-> new routes for request detail
+-> new dialog for requesting new docker image
+-> speed dial add action (new docker image request)
+-> speed dial optimize
+-> fixed javascript base64 encoding issue
+-> added required rule for submitting request
+-> tested simple flow, work from submitting to finish processing
+-> user request list
+-> query definition changes
+-> make status chips reusable
+-> dashboard different layout for user and admin
+-> request detail page
+-> user can now download output file
+-> minor changes
+
+
+Main Server
+
