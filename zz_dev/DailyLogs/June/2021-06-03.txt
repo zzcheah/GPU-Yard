@@ -18,4 +18,5 @@ React Front End
 
 
 Main Server
-
+-> modify notification creation at WorkerService
+-> tested flow working
