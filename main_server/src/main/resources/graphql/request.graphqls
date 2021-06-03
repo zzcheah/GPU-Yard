@@ -10,6 +10,7 @@ type Request {
     assignedTo: String
     inputFiles: [String]
     outputFiles: [String]
+    remark: String
 }
 
 # Root

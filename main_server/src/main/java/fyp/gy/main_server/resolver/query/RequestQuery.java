@@ -25,7 +25,6 @@ public class RequestQuery implements GraphQLQueryResolver {
 
     public List<Request> getMyRequests() {
         String id = userDetails().getProfile().getId();
-        System.out.println(id);
         return repo.findByUserID(id);
     }
 

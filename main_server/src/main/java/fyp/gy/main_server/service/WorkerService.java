@@ -107,7 +107,8 @@ public class WorkerService {
                 Request request = requestRepo.findById(requestID).orElse(null);
 
                 if (request == null) {
-                    log.error(String.format("RequestID #%s for Worker $%s is missing", requestID, worker.getId()));
+                    log.warn(String.format("RequestID #%s for Worker $%s is missing", requestID, worker.getId()));
+                    worker.getRunningTasks().remove(i--);
                     continue;
                 }
 
@@ -124,10 +125,11 @@ public class WorkerService {
                         log.info(String.format("Updated Request #%s :: %s", requestID, note));
                         worker.getRunningTasks().remove(i--);
                         Notification notification = Notification.builder()
-                                .content(String.format("Error processing your request # %s.",requestID))
+                                .content(String.format("Error processing your request # %s.",request.getName()))
                                 .isRead(false)
                                 .severity("error")
                                 .user(request.getUserID())
+                                .link("/requests/"+requestID)
                                 .createdAt(new SimpleDateFormat(DATE_TIME_FORMAT, Locale.ENGLISH).format(currentTime))
                                 .build();
 

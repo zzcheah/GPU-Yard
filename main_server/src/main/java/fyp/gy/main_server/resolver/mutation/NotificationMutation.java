@@ -38,7 +38,6 @@ public class NotificationMutation implements GraphQLMutationResolver {
 
         notification.setRead(!notification.isRead());
         template.save(notification);
-        System.out.println("asdasdasd");
 
         return notification;
 
