@@ -1,0 +1,16 @@
+<== 4 June 2021 ==>
+
+React Front End
+-> new svg illustration
+-> new pages for approving worker and image
+-> new route for the above pages
+-> admin routes are put under an array and mapped within switch
+-> remove redundant codes
+-> minor changes
+
+
+Main Server
+-> some models added builder lombok
+-> addnewimage now check for duplicate tag
+-> register worker to map after being approved or added manually
+-> more graphql definition
