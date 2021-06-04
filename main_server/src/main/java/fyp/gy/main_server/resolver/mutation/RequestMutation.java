@@ -38,6 +38,7 @@ public class RequestMutation implements GraphQLMutationResolver {
 
         UserProfile profile = userDetails().getProfile();
         if (!profile.getRole().equals("USER")) throw new GraphQLException("Forbidden Access");
+        if (!profile.getRole().equals("Active")) throw new GraphQLException("User not allowed to make request");
         return requestService.createRequest(input, profile.getId());
 
     }
