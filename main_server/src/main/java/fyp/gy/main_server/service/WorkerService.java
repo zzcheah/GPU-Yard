@@ -89,6 +89,9 @@ public class WorkerService {
         Worker worker = workerRepo.findById(id).orElse(null);
         return worker!=null;
     }
+    public void addToMap(Worker worker) {
+        workerMap.put(worker.getId(),worker);
+    }
 
     private void updateStates() {
 

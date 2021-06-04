@@ -12,7 +12,7 @@ extend type Query {
     workerApplications: [WorkerApplication]!
 }
 
-# Root
-#extend type Mutation {
-#    setReadNotification(input: String): Notification
-#}
+
+extend type Mutation {
+    approveWorker(input: String): WorkerApplication
+}

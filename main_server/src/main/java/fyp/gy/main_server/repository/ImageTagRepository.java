@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface ImageTagRepository extends MongoRepository<ImageTag,String> {
 
     List<ImageTag> findByImage(String image);
+
+    ImageTag findByImageAndTag(String image, String tag);
 }

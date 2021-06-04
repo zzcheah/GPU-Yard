@@ -32,7 +32,7 @@ public class DockerImageMutation implements GraphQLMutationResolver {
     }
 
 
-    public ImageTag addNewImage(AddNewImageInput input) {
+    public ImageTag addNewImage(AddNewImageInput input) throws Exception {
 
         DockerImage image = imageRepo.findByName(input.getImage()).orElse(null);
         if (image == null) {
@@ -42,8 +42,10 @@ public class DockerImageMutation implements GraphQLMutationResolver {
                     .description("General description for image " + input.getImage())
                     .build();
             template.save(image);
-            log.info("registered a new docker image");
         }
+
+        ImageTag exist = tagRepo.findByImageAndTag(input.getImage(),input.getTag());
+        if(exist!=null) throw new Exception("Image already exists");
 
         ImageTag tag = ImageTag.builder()
                 .image(input.getImage())
@@ -54,6 +56,8 @@ public class DockerImageMutation implements GraphQLMutationResolver {
         tag = tagRepo.insert(tag);
         image.getTags().add(tag.getId());
         imageRepo.save(image);
+
+        log.info("registered a new docker image");
 
         return tag;
 

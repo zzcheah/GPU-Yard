@@ -2,7 +2,7 @@ type Worker {
     id: String!
     name: String!
     maxTasks: Int!
-    ipAddress: String!
+    ipAddress: String
     lastActive: Date
     status: String
     runningTasks: [String]!
